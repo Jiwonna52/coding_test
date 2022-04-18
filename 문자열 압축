@@ -1,0 +1,52 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+using namespace std;
+
+int solution(string s) {
+    int answer = s.length();
+    string s_answer = s;
+    int count = 1;
+    string tmp_all = "";
+    string tmp = "";
+    
+    int cut_s = s.length()/2;
+    
+    for(int i=1; i<=cut_s; i++){    
+        tmp_all = "";
+        tmp = "";
+        count = 1;
+        string standard = s.substr(0, i);
+    
+        for(int j=i; j<s.length(); j+=i){
+            tmp = s.substr(j, i);
+            
+            if(standard == tmp){
+                count++;
+                //cout << standard << " " << tmp << endl;
+            }else{
+                if(count > 1){
+                    tmp_all += to_string(count);
+                }
+                tmp_all += standard;
+                standard = tmp;
+                count = 1;
+            }
+        }
+        
+        if(count > 1){
+            tmp_all += to_string(count);
+        }
+        
+        tmp_all += standard;
+
+        //cout <<i << " " << tmp_all << endl;
+        
+        if(answer > tmp_all.length()){
+            answer = tmp_all.length();
+        }
+
+    }
+        return answer;
+}
