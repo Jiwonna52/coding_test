@@ -1,0 +1,30 @@
+#include <iostream>
+#include<string>
+#include<stack>
+
+using namespace std;
+
+int solution(string s)
+{
+    int answer = 1;
+    stack<char> sc;
+    
+    /*sc에 원소가 존재하고 넣으려는 값과 스택의 제일 위의 값이 같다면 pop한다.
+    이때 두 개를 삭제해야 하는데 하나만 삭제한다고 걱정할 필요는 없다.
+    sc의 탑 원소와 같은 s[i]는 stack에 들어가지 않기 때문에 삭제한 것으로 간주한다.*/
+    for(int i=0; i<s.size(); i++){
+        if(sc.size() >0 && sc.top() == s[i]){
+            sc.pop();
+        }else{
+            /*스텍에 원소가 없거나 두 문자가 같지 않으면 문자를 스텍에 넣어준다.*/
+            sc.push(s[i]);
+        }
+    }
+    
+    /*문자열을 전부 돌리고 난 다음에 만일 스텍에 원소가 남아있더면 0을 반환.*/
+    if(sc.size() != 0){
+        answer = 0;
+    }
+
+    return answer;
+}
