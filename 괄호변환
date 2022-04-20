@@ -1,0 +1,103 @@
+#include<iostream>
+#include<string>
+#include<stack>
+
+using namespace std;
+
+/*문자열을 검색해서 u가 올바른 문자열인지 아닌지를 확인*/
+bool okay(string &s) {
+	
+	/*문자열 s의 사이즈가 0이면 밑의 코드를 실행할 필요가 없으므로 true를 반환*/
+	if (!s.size()) {
+		return true;
+	}
+
+	stack<char> st;
+
+	/*문자열 s의 맨 처음이 ')'이면 틀린 문자열이므로 false를 반환
+	'('이면 문자열 첫 문자 '('를 스택에 push한다.*/
+	if (s[0] == ')') {
+		return false;
+	}
+	else {
+		st.push(s[0]);
+	}
+
+	/*i가 1부터 s끝까지 s[i]가 ')'이고 st가 비어 있어 비교할 '('가 존재하지 않는다면
+	옳지 않은 문자열이니까 false를 반환. 그렇지 않다면 pop을 해서 비교한 문자 '(' 하나를
+	지워준다. 
+	만일 문자가 '('이라면 스텍에다가 '('를 넣어준다.
+	즉, 스텍에다가 '('를 넣어주고 ')'과 비교하는 것이다.*/
+	for (int i = 1; s[i]; i++) {
+		if (s[i] == ')') {
+			if (st.empty()) {
+				return false;
+			}
+			st.pop();
+		}
+		if (s[i] == '(') {
+			st.push('(');
+		}
+	}
+
+	/*위의 for문을 돌려줬는데도 스텍에 '('가 남아 있다면 옳지 않은 문자열이므로
+	false를 반환한다.
+	그게 아니라면 옳은 문자열이기에 true를 반환한다.*/
+	if (!st.empty()) {
+		return false;
+	}
+	else {
+		return true;
+	}
+
+}
+
+/*문자열을 만들어주는 함수*/
+string make(string u) {
+	/*문자열은 2보다 크다고 했으므로 만일 2이하이면 ""를 반환한다.*/
+	if (u.length() <= 2) {
+		return "";
+	}
+
+	string ret = "";
+
+	/*앞과 뒤의 문자를 제거한다고 했기 때문에 i는 1부터 u의 길이 -1까지 돌려준다.
+	만일 '('가 문자라면 ')'를 붙여주고 아니라면 '('를 붙여준다.
+	각 문자를 거꾸로 해주라고 했기 때문에.*/
+	for (int i = 1; i < u.length()-1; i++) {
+		ret += (u[i] == '(' ? ')' : '(');
+	}
+
+	return ret;
+}
+
+/*재귀함수.
+문자열이 존재할 경우만, 문자열의 첫 문자가 '('이라면 1을 넣어주고 아니라면 -1을 넣어준다.
+cnt만큼 돌려주는 데, 문자열의 ')'가 더 커지면 while문을 탈출하도록 한다. 
+')'가 더 많아지면 음수가 나오도록 만들었음.
+그리고 u와 v문자열을 off기준으로 넣어준다.
+만일 u가 참이면 v를 돌려준다. u가 옳지 않다면 re를 돌려주고 make(u)해서 붙여준다.*/
+string re(string p) {
+	if (p.size()) {
+		int cnt = (p[0] == '(' ? 1 : -1);
+		int off = 1;
+		while (cnt) {
+			cnt += (p[off++] == '(' ? 1 : -1);
+		}
+		string u = p.substr(0, off);
+		string v = p.substr(off);
+
+		if (okay(u)) {
+			return u + re(v);
+		}
+		else {
+			return "(" + re(v) + ")" + make(u);
+		}
+	}
+	return "";
+}
+
+int main() {
+	string p = "()))((()";
+	cout << re(p);
+}
