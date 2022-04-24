@@ -1,0 +1,40 @@
+#include<iostream>
+#include<string>
+#include<stack>
+
+using namespace std;
+
+int main() {
+	int cnt = 0;
+	string s = "";
+	stack<char> st;
+
+	cin >> cnt;
+  /*입력 버퍼를 비워줘야 한다.*/
+	cin.ignore();
+
+	for (int i = 0; i < cnt; i++) {
+		getline(cin, s);
+    
+    /*마지막 단어까지 뺄 수 있게 공백을 추가해준다. 따로 빼주는 방법도 있지만 그렇게 하려면 반복문을 하나 더 써야 한다.*/
+		s += ' ';
+
+		for (int j = 0; j < s.length(); j++) {
+    /*만일 공백을 만났을 경우 스택을 차례대로 빼주면 된다.*/
+			if (s[j] == ' ') {
+				while (!st.empty()) {
+					cout << st.top();
+					st.pop();
+				}
+				cout << ' ';
+			}
+      /*공백을 만나지 않았더라면 해당 문자를 스택에 넣는다.*/
+			else {
+				st.push(s[j]);
+			}
+		}
+		cout << endl;
+	}
+
+	return 0;
+}
