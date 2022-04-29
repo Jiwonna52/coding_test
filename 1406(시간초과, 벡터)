@@ -1,0 +1,70 @@
+#include<iostream>
+#include<vector>
+#include<string>
+
+using namespace std;
+
+int main() {
+	vector<char> v;
+	string s = "";
+	/*아직 어떤 문자열도 받지 않았으니 현재 커서의 위치는 0이다.*/
+	int idx = 0;
+	int n = 0;
+	char order;
+	//int len = v.size();
+
+	/*초기 문장을 받는다.*/
+	cin >> s;
+	/*현재 커서의 위치는 맨 마지막에 위치해 있다.*/
+	idx = s.length();
+
+	/*받은 문장을 벡터와 스택에 넣는다.*/
+	for (auto s1 : s) {
+		v.push_back(s1);
+	}
+
+	/*명령어의 수를 받는다.*/
+	cin >> n;
+
+	/*명령어의 수 만큼 for문을 돌린다.*/
+	for (int i = 0; i < n; i++) {
+		cin >> order;
+
+		/*커서를 왼쪽으로 옮길 경우 커서가 제일 앞에 있지 않을 경우에만 idx를 --해준다.*/
+		if (order == 'L') {
+			if (idx != 0) {
+				idx--;
+			}
+		}
+
+		/*커서를 오른쪽으로 옮길 경우 커서가 문장 맨 뒤에 있지 않을 경우에만 idx를 ++해준다.*/
+		if(order == 'D'){
+			if (idx != v.size()) {
+				idx++;
+			}
+		}
+
+		/*커서의 왼쪽에 있는 문자를 하나 지워줄 경우, idx-1(커서는 해당 문자의 오른쪽에 있다)의 문자를 지워준 후에 
+		idx를 --해준다(문자 하나가 지워졌기 때문에)*/
+		if (order == 'B') {
+			if (idx != 0) {
+				v.erase(v.begin() + (idx - 1));
+				idx--;
+				//len = v.size();
+			}
+		}
+
+		/*커서의 왼쪽에 문자를 넣을 경우, 넣고자 하는 문자를 하나 받아서 커서의 위치에 넣어주고 idx를 ++해주면 된다.*/
+		if (order == 'P') {
+			char add;
+			cin >> add;
+			v.insert(v.begin() + idx, add);
+			idx++;
+			//len = v.size();
+		}
+	}
+
+	for (auto vv : v) {
+		cout << vv;
+	}
+}
