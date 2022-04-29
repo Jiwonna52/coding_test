@@ -1,0 +1,37 @@
+#include<iostream>
+#include<vector>
+#include<stack>
+
+using namespace std;
+
+int main() {
+	vector<char> v;
+	stack<int> st;
+	int cnt = 1;
+	int n;
+	cin >> n;
+
+	for (int i = 1; i <= n; i++) {
+		int a;
+		cin >> a;
+
+		while (cnt <= a) {
+			st.push(cnt);
+			cnt++;
+			v.push_back('+');
+		}
+
+		if (a == st.top()) {
+			v.push_back('-');
+			st.pop();
+		}
+		else {
+			cout << "NO";
+			return 0;
+		}
+	}
+
+	for (auto vv : v) {
+		cout << vv << '\n';
+	}
+}
