@@ -1,0 +1,94 @@
+#include<iostream>
+#include<deque>
+#include<string>
+
+using namespace std;
+
+int main() {
+	int n;
+	cin >> n;
+
+	/*덱(삽입과 삭제가 양끝에서 이루어지는 자로구조)은 deque로 이용 가능하다.*/
+	deque<int> dq;
+
+	/*n이 0이 될 때까지*/
+	while (n--) {
+		string order;
+		cin >> order;
+
+		/*앞에다가 숫자를 삽입*/
+		if (order == "push_front") {
+			int a;
+			cin >> a;
+
+			dq.push_front(a);
+		}
+
+		/*뒤에다가 숫자를 삽입*/
+		if (order == "push_back") {
+			int a;
+			cin >> a;
+
+			dq.push_back(a);
+		}
+
+		/*앞의 숫자를 출력하고 삭제*/
+		if (order == "pop_front") {
+			if (dq.empty()) {
+				cout << "-1" << '\n';
+			}
+			else {
+				cout << dq.front() << '\n';
+				dq.pop_front();
+			}
+
+		}
+
+		/*뒤의 숫자를 출력하고 삭제*/
+		if (order == "pop_back") {
+			if (dq.empty()) {
+				cout << "-1" << '\n';
+			}
+			else {
+				cout << dq.back() << '\n';
+				dq.pop_back();
+			}
+
+		}
+
+		/*dq의 사이즈 출력*/
+		if (order == "size") {
+			cout << dq.size() << '\n';
+		}
+
+		/*dq가 비어있으면 1을 출력 비어있지 않으면 0을 출력*/
+		if (order == "empty") {
+			if (dq.empty()) {
+				cout << "1" << '\n';
+			}
+			else {
+				cout << "0" << '\n';
+			}
+		}
+
+		/*dq가 비어있다면 -1을 출력 아니라면 맨 앞의 숫자를 출력*/
+		if (order == "front") {
+			if (dq.empty()) {
+				cout << "-1" << '\n';
+			}
+			else {
+				cout << dq.front() << '\n';
+			}
+		}
+
+		/*dq가 비어있다면 -1을 출력 아니라면 맨 뒤의 숫자를 출력*/
+		if (order == "back") {
+			if (dq.empty()) {
+				cout << "-1" << '\n';
+			}
+			else {
+				cout << dq.back() << '\n';
+			}
+		}
+	}
+}
