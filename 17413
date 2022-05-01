@@ -1,0 +1,58 @@
+#include<iostream>
+#include<string>
+#include<stack>
+
+using namespace std;
+
+int main() {
+	string s = "";
+	stack<char> st;
+	/*b가 true라면 tag라는 뜻이다.*/
+	bool b = false;
+
+	getline(cin, s);
+
+	/*문장이 끝났음을 암시. 만일 없을 경우 마지막 단어를 무시할 수 있다.*/
+	s += '\n';
+
+	/*총 세 가지로 생각한다.
+	1. tag바로 옆에 붙어 있는 단어
+	2. tag안에 있는 단어
+	3. 띄어쓰기가 존재하는 단어*/
+	for (int i = 0; i < s.length(); i++) {
+		/*1. tag바로 옆에 붙어있는 단어
+		만일 s[i]가 <이라면 tag가 시작된다는 뜻이니 tag바로 앞에 있는 단어를 출력해야 한다.
+		그리고 tag가 시작되었음을 알리는 b를 true로 돌려준다.*/
+		if (s[i] == '<') {
+			while (!st.empty()) {
+				cout << st.top();
+				st.pop();
+			}
+			cout << "<";
+			b = true;
+		}
+		/*tag가 끝났으니 b를 false를 돌려준다.*/
+		else if (s[i] == '>') {
+			cout << ">";
+			b = false;
+		}
+		/*만일 tag가 진행중이라면(b가 true라면) s[i]를 그냥 출력한다.*/
+		else if (b) {
+			cout << s[i];
+		}
+		/*만일 tag가 시작되는 문자에 붙어있는 단어가 아니고 띄어쓰기로 이루어진 단어 혹은 단어가 끝이 났다면 stack에 있는 단어들을 출력한다.
+		그리고 st가 비었다면 이는 단어가 끝이 났다는 의미니까 띄어쓰기를 출력한다.*/
+		else if (s[i] == ' ' || s[i] == '\n') {
+			while (!st.empty()) {
+				cout << st.top();
+				st.pop();
+			}
+			cout << ' ';
+		}
+		/*만일 '<'나 ' '에 붙어있지 않다면 그냥 stack에 넣어준다.*/
+		else {
+			st.push(s[i]);
+		}
+
+	}
+}
