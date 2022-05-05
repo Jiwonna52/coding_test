@@ -1,0 +1,33 @@
+/*1과 2로 n을 얼마큼 만들 수 있느냐
+top-dwon 방식을 이용*/
+
+#include<iostream>
+
+using namespace std;
+
+int D[1001];
+
+int sol(int n) {
+	if (n == 1) {
+		return 1;
+	}
+	else if (n == 2) {
+		return 2;
+	}
+	else if (D[n] > 0) {
+		return D[n];
+	}
+	else {
+		D[n] = sol(n - 1) + sol(n - 2);
+		D[n] %= 10007;
+		return D[n];
+	}
+}
+
+int main() {
+	int n;
+	cin >> n;
+
+	cout << sol(n);
+	return 0;
+}
