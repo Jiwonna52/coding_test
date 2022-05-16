@@ -1,0 +1,50 @@
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+/*Buffer는 Scanner보다 빠르다.
+버퍼에 저장해서 한 번에 전달하는 게 일일이 직접 전달하는 것보다 쉽기 때문이다.*/
+import java.io.IOException;
+/*입출력은 예외 처리를 해줘야 한다.
+println(), print(), printf()의 경우는 자체적으로 예외처리가 되어 있음.*/
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.StringTokenizer;
+/*문자열을 파싱하는*/
+
+public class Main{
+    public static void main(String[] args)throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        
+        int N = Integer.parseInt(br.readLine());
+        
+        StringTokenizer st;
+        
+        for(int i=0; i<N; i++){
+            st = new StringTokenizer(br.readLine(), " ");
+            /*문자열을 받으면서 띄어쓰기 기준으로 파싱.
+            StringTokenizer(문자열)
+            -> 띄어쓰기 기준
+            StringTokenizer(문자열, 구분자)
+            -> 구준자를 기준으로 문자열 분리
+            StringTokenizer(문자열, 구분자, true/false)
+            -> 구분자를 기준으로 문자열 분리 구준자도 토큰으로 넣으면(true) 넣지 않으면(false)*/
+            bw.write((Integer.parseInt(st.nextToken()) + Integer.parseInt(st.nextToken())) + "\n");
+            /*파싱한 값을 더해주면서 출력*/
+        }
+        
+        br.close();
+        
+        bw.flush();
+        /*버퍼를 비운다*/
+        bw.close();
+        /*버퍼를 닫는다*/
+        
+        /*https://st-lab.tistory.com/30
+        https://st-lab.tistory.com/41
+        https://reakwon.tistory.com/90
+        https://jhnyang.tistory.com/398
+        https://kjwan4435.tistory.com/98
+        https://m.blog.naver.com/ka28/221850826909
+        */
+    }
+}
