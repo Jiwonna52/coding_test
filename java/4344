@@ -1,0 +1,41 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main{
+    public static void main(String[] args)throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        
+        int n = Integer.parseInt(br.readLine());
+        StringTokenizer st;
+ 
+        for(int i=0; i<n; i++){
+            st = new StringTokenizer(br.readLine(), " ");
+            int stu_cnt = Integer.parseInt(st.nextToken());
+            int[] arr = new int[stu_cnt];
+            double sum = 0;
+            double student = 0;
+            double ave = 0;
+            
+            for(int j=0; j<stu_cnt; j++){
+                int tmp = Integer.parseInt(st.nextToken());
+                arr[j] = tmp;
+                sum += tmp;
+            }
+            
+            ave = sum/stu_cnt;
+            
+            for(int k=0; k<stu_cnt; k++){
+                if(arr[k] > ave){
+                    student++;
+                }
+            }
+            
+            System.out.printf("%.3f%%\n", (student/stu_cnt)*100);
+        }
+    }
+    /*https://st-lab.tistory.com/51*/
+}
