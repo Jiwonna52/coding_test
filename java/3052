@@ -1,0 +1,27 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.Arrays;
+
+public class Main{
+    public static void main(String[] args)throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = 0;
+        int[] arr = new int[42];
+        int answer = 0;
+        
+        for(int i=0; i<42; i++){
+            arr[i] = 0;
+        }
+        
+        for(int i=0; i<10; i++){
+            n = Integer.parseInt(br.readLine());
+            int tmp = n%42;
+            if(arr[tmp] == 0){
+                arr[tmp]++;
+                answer++;
+            }
+        }
+        System.out.println(answer);
+    }
+}
