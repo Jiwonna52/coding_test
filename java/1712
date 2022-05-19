@@ -1,0 +1,30 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+public class Main{
+
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+		
+		int A = Integer.parseInt(st.nextToken());
+		int B = Integer.parseInt(st.nextToken());
+		int C = Integer.parseInt(st.nextToken());
+
+		int cnt = 0;
+        
+        if(B >= C) {
+			System.out.print("-1");
+		}else {
+			while(true) {
+                /*일일이 계산해서 cnt를 구할 필요 없이 cnt를 바로 구해주는 방법을 사용한다.*/
+                cnt = A/(C-B);
+                System.out.println(cnt+1);
+                break;
+			}
+		}
+
+	}
+}
