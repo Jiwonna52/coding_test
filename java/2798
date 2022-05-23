@@ -1,0 +1,53 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+public class Main {
+	    
+	    public static void main(String[] args)throws IOException{
+	    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	    	StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+	    	
+	    	int N = Integer.parseInt(st.nextToken());
+	    	int M = Integer.parseInt(st.nextToken());
+	    	
+	    	int[] arr = new int[N];
+	    	
+	    	st = new StringTokenizer(br.readLine(), " ");
+	    	
+	    	for(int i=0; i<N; i++) {
+	    		arr[i] = Integer.parseInt(st.nextToken());
+	    	}
+	    	
+	    	int max = 0;
+	    	int tmp = 0;
+            
+	    	for(int first = 0; first < N -2; first++) {
+	    		for(int second = first + 1; second < N-1; second++) {
+	    			for(int third = second+1; third < N; third++) {
+                        //third에 first+2를 해줄 경우 second의 카드와 third카드가 겹칠 수 있다.
+	    				tmp = arr[first] + arr[second] + arr[third];
+                        if(tmp == M){
+                            max = M;
+                            break;
+                        }
+	    				if(tmp < M && tmp > max) {
+	    					max = tmp;
+	    				}
+	    				
+	    			}
+                    if(tmp == M){
+                        break;
+                    }
+	    		}
+                if(tmp == M){
+                    break;
+                }
+	    	}
+	    	
+	    	System.out.println(max);
+	    	
+	    }
+	    
+}
