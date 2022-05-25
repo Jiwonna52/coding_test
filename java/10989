@@ -1,0 +1,51 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.Arrays;
+import java.io.BufferedWriter;
+import java.io.OutputStreamWriter;
+
+
+public class Main {
+
+	    public static void main(String[] args)throws IOException{
+	    	BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+	    	BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	    	
+	    	int N = Integer.parseInt(br.readLine());
+	    	int[] arr = new int[N+1];
+	    	int[] arr_count = new int[10001];
+	    	int[] answer = new int[N+1];
+	    	
+            //숫자를 받고 해당 숫자가 얼마나 나왔는지 arr_count에 표시를 해준다.
+	    	for(int i=1; i<=N; i++) {
+	    		arr[i] = Integer.parseInt(br.readLine());
+	    		arr_count[arr[i]]++;
+	    	}
+	    	
+            //arr_count의 값을 누적합으로 바꾼다. 누적합은 해당하는 값의 시작점 -1을 알려준다.
+	    	for(int i=2; i<arr_count.length; i++) {
+	    		arr_count[i] += arr_count[i-1];
+	    	}
+	    	
+            //처음 받은 값을 뒤에서부터 가지고 온다.
+	    	//tmp가 몇 번 나왔는지의 누적합 arr_count에서 값을 찾아서 -1을 해준다(시작점 -1).
+	    	//그리고 answer의 해당하는 위치에 tmp를 넣어준다.
+	    	for(int i = N; i>=1; i--) {
+	    		int tmp = arr[i];
+	    		answer[arr_count[tmp]--] = tmp;
+	    	}
+	    	
+	    	
+	    	for(int i : answer) {
+	    		if(i == 0) {
+	    			continue;
+	    		}
+	    		bw.write(String.valueOf(i) + '\n');
+	    	}
+	    	
+	    	bw.flush();
+	    	bw.close();
+	    }
+	    
+}
