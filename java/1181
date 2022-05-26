@@ -1,0 +1,45 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.Arrays;
+
+public class Main {
+
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		
+		int N = Integer.parseInt(br.readLine());
+		String[] arr = new String[N];
+		
+		for(int i=0; i<N; i++) {
+			String s = br.readLine();
+			arr[i] = s;
+			s.length();
+		}
+		
+		/**
+		 * 람다식을 사용
+		 * e1과 e2의 길이가 같을 경우 문자열 비교를 위해 compareTo를 이용
+		 * compareTo의 경우 매개변수가 하나 필요하다. 
+		 * 'return e1.compareTo(e2)'는 e1의 문자열과 e2의 문자열을 비교한다는 의미다.
+		 * 만일 길이가 다르다면 길이를 기준으로 정렬을 한다.
+		 * java는 오름차순으로 정렬을 하기에 음수가 나오면 뒤에 있는 문자 e2의 길이가 길다는 뜻이기에 값을 바꾸지 않고
+		 * 양수가 나오면 앞의 길이가 길다는 뜻이기에 값을 바꾼다. 
+		 */
+		Arrays.sort(arr, (e1, e2) -> {
+			if(e1.length() == e2.length()) {
+				return e1.compareTo(e2);
+			}else {
+				return e1.length() - e2.length();
+			}
+		});
+		
+		 String[] resultArr = Arrays.stream(arr).distinct().toArray(String[]::new);
+	
+		
+		for(String s : resultArr) {
+			System.out.println(s);
+		}
+
+	}
+}
