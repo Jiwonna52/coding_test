@@ -1,0 +1,48 @@
+import java.util.Stack;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+
+public class Main {
+	
+	public static boolean check(String s) {
+		Stack<Character> stack = new Stack<>();
+		
+		for(int j=0; j<s.length(); j++) {
+			if(s.charAt(j) == '(') {
+				stack.push('(');
+			}else {
+				if(stack.isEmpty()) {
+					return false;
+				}else {
+					stack.pop();
+				}
+			}
+		}
+		
+		if(stack.isEmpty()) {
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	public static void main(String[] args)throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringBuilder sb = new StringBuilder();
+		int N = Integer.parseInt(br.readLine());
+		
+		for(int i=0; i< N; i++) {
+			String s = br.readLine();
+			
+			if(check(s)) {
+				sb.append("YES").append('\n');
+			}else {
+				sb.append("NO").append('\n');
+			}
+		}
+		System.out.println(sb);
+		
+	}
+}
