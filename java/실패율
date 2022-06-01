@@ -1,0 +1,57 @@
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+
+class Solution {
+    
+    /*pair을 만드는 클래스
+    */
+    	static class pair{
+		int idx;
+		double rate;
+		
+		public pair(int idx, double rate) {
+			this.idx = idx;
+			this.rate = rate;
+			// TODO Auto-generated constructor stub
+		}
+	}
+    
+    public int[] solution(int N, int[] stages) {
+        int challenge = 0;
+		int fail = 0;
+        int pass = 0;
+        int[] answer = new int[N];
+        
+        ArrayList<pair> arr = new ArrayList<>();
+        
+        for(int i=1; i<=N; i++) {
+			for(int j=0; j<stages.length; j++) {
+				if(stages[j] >= i) {
+					challenge++;
+				}
+				if(stages[j] == i) {
+					fail++;
+				}
+			}
+            if(challenge == 0){
+                arr.add(new pair(i, 0.0));
+            }else{
+                double tmp_rate = (double) fail/challenge;
+			    arr.add(new pair(i, tmp_rate));
+            }
+			challenge = 0;
+			fail = 0;
+		}
+        
+        Collections.sort(arr, (e1, e2) -> {
+			return -Double.compare(e1.rate, e2.rate);
+		});
+        
+        for(int i=0; i<arr.size(); i++) {
+			answer[i] = arr.get(i).idx;
+		}
+        
+        return answer;
+    }
+}
