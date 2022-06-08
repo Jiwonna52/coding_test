@@ -1,0 +1,49 @@
+import java.io.IOException;
+import java.util.StringTokenizer;
+import java.util.HashMap;
+import java.util.HashSet;
+ 
+public class Main {
+
+	public static void main(String[] args)throws IOException{
+		String[] id_list = {"muzi", "frodo", "apeach", "neo"};
+		String[] report = {"muzi frodo","apeach frodo","frodo neo","muzi neo","apeach muzi"};
+		int k = 2;
+        int[] answer = new int[id_list.length];
+        //신고받은 사람을 key, 신고한 사람을 value로
+        HashMap<String, HashSet<String>> map = new HashMap<>();
+        //각 id의 idx를 저장하는 HashMap. id가 key, idx가 value
+        HashMap<String, Integer> idx = new HashMap<>();
+        
+        //map과 idx를 초기화
+        for(int i=0; i<id_list.length; i++) {
+        	map.put(id_list[i], new HashSet<String>());
+        	idx.put(id_list[i], i);
+        }
+        
+        //report에 있는 값을 파싱해서 map에 넣어준다.
+        //중요한 점!!! key는 신고를 받은 사람이고 value는 신고를 한 사람의 HashSet이다.
+        for(int i=0; i<report.length; i++) {
+        	StringTokenizer st = new StringTokenizer(report[i], " ");
+        	String er = st.nextToken();
+        	String ed = st.nextToken();
+        	
+        	map.get(ed).add(er);
+        }
+        
+        //신고를 받은 사람들 중 그 수가 k 이상인 경우 메일의 수를 더해준다.
+        //answer의 인덱스는 각 id가 가지는 idx와 연결해서 더해주면 된다.
+        for(int i=0; i<id_list.length; i++) {
+        	HashSet<String> tmp = map.get(id_list[i]);
+        	if(map.get(id_list[i]).size() >= k) {
+        		for(String s : tmp) {
+        			answer[idx.get(s)]++;
+        		}
+        	}
+        }
+                
+        for(int an : answer) {
+        	System.out.println(an);
+    }
+}
+}
