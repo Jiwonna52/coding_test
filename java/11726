@@ -1,0 +1,38 @@
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+ 
+public class Main {
+	
+	//해당 값 i를 만드는 데 드는 최소 연산의 개수
+	static Integer[] arr;
+
+	public static void main(String[] args)throws IOException{
+		 BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		 
+		 int num = Integer.parseInt(br.readLine());
+		 
+		 //크기를 1001로 설정해주지 않으면 런타임 에러(ArrayindexOutOfBounds)가 나타난다.
+		 arr = new Integer[1001];
+		 //n이 11보다 작다고 했으니까 10까지
+		 //1을 만들 수 있는 경우의 수는 {1}으로 1개이다.
+		 arr[1] = 1;
+		 //2을 만들 수 있는 경우의 수는 {1+1, 2}으로 2개이다.
+		 arr[2] = 2;
+		 
+		 //1,2,3 더하기와 비슷하게 풀어주면 된다.
+		 //다만 여기서는 1과 2로 n을 만드는 문제이니 i-3은 할 필요가 없다.
+		 //3의 경우에는 1+2와 2+1이 있다.
+		 //이는 1+(1+1), 1+(2), 2+(1)로 볼 수 있다.
+		 //즉, 더해주는 1, 2와는 상관 없이 1과 2의 경우의 수를 더하면 3을 만들 수 있는 것이다.
+		 //주의할 점은 계산을 한 후 10007을 나눈 나머지 값을 횟수로 넣어줘야 한다는 것이다.
+		 for(int i=3; i<=num; i++) {
+			 arr[i] = arr[i-1] + arr[i-2];
+			 arr[i] %= 10007;
+		 }
+		 
+		 
+		 System.out.println(arr[num]);
+
+	}
+}
