@@ -5,8 +5,6 @@ import java.util.StringTokenizer;
 
 public class Main {
 
-    //단순히 열에서 가장 작은 수만을 구해서 더해주면 안 된다.
-    //모든 행과 열의 경우의 수를 구해줘야 한다.
     public static void main(String[] args)throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         int N = Integer.parseInt(br.readLine());
