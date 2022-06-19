@@ -1,0 +1,39 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        int T = Integer.parseInt(br.readLine());
+
+        for(int i=0; i<T; i++){
+            int n = Integer.parseInt(br.readLine());
+
+            int[][] arr = new int[2][n+1];
+            int[][] dp = new int[2][n+1];
+            for(int j=0; j<2; j++){
+                String[] s = br.readLine().split(" ");
+                for(int k=1; k<=n; k++){
+                    arr[j][k] = Integer.parseInt(s[k-1]);
+                }
+
+            }
+
+            // 첫번째 column은 자기 자신이 최대이므로 자기 자신으로 초기화
+            dp[0][1] = arr[0][1];
+            dp[1][1] = arr[1][1];
+
+            //해당 스티커를 골랐을 때 고를 수 있는 스터커 중 값이 가장 큰 것
+            //0열 j행의 스티커를 고르면 dp[1][j-1]과 dp[1][j-2]에서 고를 수 있다.
+            //1열 j행의 스티커를 고르면 dp[0][j-1]과 dp[0][j-2]에서 고를 수 있다.
+            for (int j = 2; j <= n; j++) {
+                dp[0][j] = Math.max(dp[1][j - 1], dp[1][j - 2]) + arr[0][j];
+                dp[1][j] = Math.max(dp[0][j - 1], dp[0][j - 2]) + arr[1][j];
+            }
+
+            System.out.println(Math.max(dp[0][n], dp[1][n]));
+        }
+    }
+}
