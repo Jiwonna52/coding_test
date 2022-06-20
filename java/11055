@@ -1,0 +1,52 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        int N = Integer.parseInt(br.readLine());
+        int[] arr = new int[N+1];
+        long[] dp = new long[N+1];
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        boolean b = false;
+
+        for(int i=0; i<N; i++){
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+
+        dp[0] = arr[0];
+
+        for(int i=1; i<N; i++){
+            //현재 i에 있는 값보다 j의 값이 작으면 이는 오름차순으로 볼 수 있다.
+            //dp[i]에 있는 값과 현재 i의 값과 dp[j](현재 값보다 작은 값)을 더해서 큰 것을 dp[i]에 넣어준다.
+            //b에 ture를 해주는 이유는 만일 해당하는 값이 앞에 있는 어떤 값보다 작으면
+            //dp[i]에 arr[i]를 넣어줘야 하기 때문이다.
+            for(int j=0; j<i; j++){
+                if(arr[i] > arr[j]){
+                    dp[i] = Math.max(dp[i], arr[i] + dp[j]);
+                    b = true;
+                }
+            }
+            //앞에 있는 어느 값보다 해당 값이 작다는 의미는 새롭게 수열을 시작할 수 있다는 것이다.
+            //그러므로 dp[i]에 arr[i]의 값을 넣어주지 않으면 해당 값이 0이 되어서
+            //오름차순 수열의 제일 첫 번째 숫자(arr[i])를 빠트리게 된다.
+            if(!b){
+                dp[i] = arr[i];
+            }
+            b = false;
+        }
+
+        long max = dp[0];
+
+        for(int i=1; i<dp.length; i++){
+            if(max < dp[i]){
+                max = dp[i];
+            }
+        }
+
+        System.out.println(max);
+    }
+}
