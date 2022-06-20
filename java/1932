@@ -1,0 +1,40 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());
+        int[][] arr = new int[n][n];
+        int[][] dp = new int[n][n];
+
+        //숫자 삼각형을 배열에다가 넣어준다.
+        for(int i=0; i< n; i++){
+            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+            for(int j=0; j<=i; j++){
+                arr[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        //밑에서부터 거꾸로 올라가는 방식을 이용한다(Bottom-up)
+        //일단 제일 밑에는 arr의 밑단을 넣어주고 시작한다.
+        dp[n-1] = arr[n-1];
+
+        for(int i=n-2; i>=0; i--){
+            //j+1을 해주기 때문에 dp[i+!].length-1을 해주지 않으면 배열의 범위를 초과한다.
+            for(int j=0; j<dp[i+1].length-1; j++) {
+                //System.out.print(dp[i + 1][j] + " or " +dp[i + 1][j + 1] + " ");
+                //해당하는 수는 밑에서 대각선 왼쪽에 있는 수와 대각선 오른쪽에 있는 수를 
+                //해당하는 수의 본래 값과 더한 최댓값이다.
+                dp[i][j] = Math.max(dp[i + 1][j] + arr[i][j] , dp[i + 1][j + 1] + arr[i][j]);
+                //System.out.print("Max: " + dp[i][j] + "/ ");
+            }
+            //System.out.println();
+        }
+        
+        System.out.println(dp[0][0]);
+
+    }
+}
