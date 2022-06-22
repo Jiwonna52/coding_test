@@ -1,0 +1,55 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        int[] arr = new int[3];
+        int[] BF = new int[3];
+        long year = 0;
+
+        //E, S, M을 각각 배열에 넣어준다.
+        for(int i=0; i<3; i++){
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+
+        //브루트 포스를 이용할 배열에다가 1로 초기화를 해준다.
+        BF[0] = 1;
+        BF[1] = 1;
+        BF[2] = 1;
+
+        //종료 조건을 따로 넣지 않고 따로 조건문으로 종료 조건을 넣어줌
+        for(year = 1; ; year++){
+            //만일 구한 배열이 주어진 배열과 같다면 탈출
+            if(BF[0] == arr[0] && BF[1] == arr[1] && BF[2] == arr[2]){
+                break;
+            }else{
+                //그렇지 않다면 각 BF배열에다가 1을 더해준다.
+                BF[0]++;
+                BF[1]++;
+                BF[2]++;
+
+                //E가 16이상이면 범위 초과이므로 1로 바꿔준다.
+                if(BF[0] >= 16){
+                    BF[0] = 1;
+                }
+                //S가 29이상이면 범위 초과이므로 1로 바꿔준다.
+                if(BF[1] >= 29){
+                    BF[1] = 1;
+                }
+                //M이 20이상아면 범위 초과이므로 1로 바꿔준다.
+                if(BF[2] >= 20){
+                    BF[2] = 1;
+                }
+            }
+        }
+
+        //값 출력
+        System.out.println(year);
+
+
+    }
+}
