@@ -1,0 +1,43 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static int N;
+    public static int M;
+    public static int[] arr;
+    public static StringBuilder sb = new StringBuilder();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st  = new StringTokenizer(br.readLine(), " ");
+
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        arr = new int[M];
+
+        dfs(0);
+        System.out.println(sb);
+
+    }
+
+    public static void dfs(int depth){
+        if(depth == M){
+            for(int tmp : arr){
+                sb.append(tmp).append(" ");
+            }
+            sb.append('\n');
+            return;
+        }
+
+        //중복을 허용했으니 굳이 visit을 확인할 필요 없다.
+        ///N이 3, M이 3일 경우
+        ///111 -> 111출력 -> 11_ -> 112출력 -> 11_ -> 113출력...
+        for(int i=0; i<N; i++){
+                arr[depth] = i + 1;
+                dfs(depth+1);
+        }
+    }
+}
