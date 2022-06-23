@@ -1,0 +1,53 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static int M;
+    public static int N;
+    public static int[] arr;
+    public static StringBuilder sb = new StringBuilder();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+
+        //1부터 N까지 가능한 수열
+        N = Integer.parseInt(st.nextToken());
+        //수열의 길이 M
+        M = Integer.parseInt(st.nextToken());
+
+        arr = new int[M];
+
+        //숫자를 늘려주는 at를 추가하고 depth는 0부터 시작한다.
+        dfs(1, 0);
+
+        System.out.println(sb);
+    }
+
+    public static void dfs(int at, int depth){
+        //종료 조건
+        //depth(수열의 길이)가 M과 같을 경우
+        if(depth == M){
+            //append해준다.
+            //일일이 출력해줄 경우 시간이 너무 많이 든다.
+            for(int tmp : arr){
+                sb.append(tmp).append(" ");
+            }
+            sb.append("\n");
+            return;
+        }
+
+        //at는 어떤 수부터 시작하는지를 알려주는 변수다.
+        //수열이 '2 3'일 경우 at는 2부터 시작해야 한다.
+        //중복되는 숫자는 고려할 필요가 없으므로 visit 배열은 필요 없다.
+        for(int i=at; i<=N; i++){
+            arr[depth] = i;
+            //앞에 넣어준 수보다 뒤에 들어가는 수가 1 더 커야 한다.
+            dfs(i+1, depth+1);
+            }
+    }
+
+
+}
