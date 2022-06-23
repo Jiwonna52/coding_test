@@ -1,0 +1,61 @@
+//15649의 풀이에 조건을 넣어서 구하는 방법
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+//15649 수정
+public class Main {
+    public static int N;
+    public static int M;
+    public static int[] arr;
+    public static boolean[] visit;
+    public static StringBuilder sb = new StringBuilder();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        arr = new int[M];
+        visit = new boolean[N];
+
+        //깊이는 0으로 초기화
+        dfs(0);
+        System.out.println(sb);
+
+    }
+    public static void dfs(int depth){
+
+        if(depth == M){
+            for(int tmp : arr){
+                sb.append(tmp).append(" ");
+            }
+            sb.append('\n');
+            return;
+        }
+
+        for(int i=0; i<N; i++){
+            if(!visit[i]){
+                //처음 숫자를 넣는 경우는 그냥 넣어준다.
+                if(depth == 0){
+                    visit[i] = true;
+                    arr[depth] = i + 1;
+                    dfs(depth+1);
+                    visit[i] = false;
+                    //두 번째 이상의 숫자를 넣는 경우
+                }else if( depth > 0){
+                    //넣어줄 숫자가 앞에 들어간 숫자보다 클 때만 넣어준다.
+                    if(arr[depth-1] < i+1){
+                        visit[i] = true;
+                        arr[depth] = i + 1;
+                        dfs(depth+1);
+                        visit[i] = false;
+                    }
+                }
+            }
+        }
+    }
+}
