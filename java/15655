@@ -1,0 +1,66 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.util.Arrays;
+
+public class Main {
+    public static int N;
+    public static int M;
+    public static int[] answer;
+    public static boolean[] visit;
+    public static int[] arr;
+    public static StringBuilder sb = new StringBuilder();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st  = new StringTokenizer(br.readLine(), " ");
+
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        answer = new int[M];
+        visit = new boolean[N];
+        arr = new int[N];
+
+        StringTokenizer st2  = new StringTokenizer(br.readLine(), " ");
+
+        for(int i=0; i<N; i++){
+            arr[i] = Integer.parseInt(st2.nextToken());
+        }
+
+        //정답 수열은 사전 순으로 증가하는 순서대로 출력해야 한다.
+        //그러므로 수열을 오름차순으로 정렬하면 자연스럽게 사전 순으로 증가하는 수열을 만들 수 있다.
+        Arrays.sort(arr);
+        //at는 들어간 숫자를 표시하는 인덱스이다.
+        dfs(0, 0);
+        System.out.println(sb);
+
+    }
+
+    public static void dfs(int at, int depth){
+        if(depth == M){
+            //Arrays.sort(answer);
+            for(int tmp : answer){
+                sb.append(tmp).append(" ");
+            }
+            sb.append('\n');
+            return;
+        }
+
+        for(int i=at; i<N; i++){
+            if(!visit[i]){
+                //현재 숫자를 방문했다고 표시
+                visit[i] = true;
+                //정답 수열에다가 숫자를 넣는다.
+                answer[depth] = arr[i];
+                //자식 노드를 탐색한다.
+                //들어간 숫자 다음부터 탐색을 해주는데, 이미 arr은 오름차순으로 정렬되어 있음을 기억한다.
+                dfs(i+1, depth+1);
+                //자식 노드를 다 탐색했다면 방문한 숫자 표시를 지워준다.
+                visit[i] = false;
+            }
+        }
+    }
+
+}
