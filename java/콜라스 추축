@@ -1,0 +1,18 @@
+class Solution {
+    public int solution(int num) {
+        int answer = 0;
+        long x = num;
+        
+        while(x != 1){
+            if(x%2 == 0){
+                x /= 2;
+                answer++;
+            }else{
+                x = (x*3)+1;
+                answer++;
+            }
+        }
+        
+        return answer >= 500 ? -1 : answer;
+    }
+}
