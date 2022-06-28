@@ -1,0 +1,65 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static int N;
+    public static int[] answer;
+    public static int[] arr;
+    public static boolean[] visit;
+    public static int max;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        arr = new int[N];
+        visit = new boolean[N];
+        answer = new int[N];
+        max = 0;
+
+        StringTokenizer st  = new StringTokenizer(br.readLine(), " ");
+
+        for(int i=0; i<N; i++){
+            arr[i] = Integer.parseInt(st.nextToken());
+        }
+
+        dfs(0);
+        System.out.println(max);
+
+    }
+
+    //주어진 숫자를 가지고 배열을 만드는 메소드
+    public static void dfs(int depth){
+
+        if(depth == N){
+            check();
+        }
+
+        for(int i=0; i<N; i++){
+            if(!visit[i]){
+                visit[i] = true;
+                answer[depth] = arr[i];
+                dfs(depth+1);
+                visit[i] = false;
+            }
+
+            }
+        }
+
+    //배열이 다 만들어지면 해당 배열을 계산하는 메소드
+    public static void check(){
+        int check_tmp = 0;
+
+        //배열을 계산하는 반복문
+        //브루트 포스 문제라 하나씩 다 해줘야 한다.
+        for(int i=0; i<N-1; i++){
+            check_tmp += Math.abs(answer[i] - answer[i+1]);
+        }
+
+        //계산한 값이 max보다 크면 max의 값을 계산한 값으로 바꿔준다.
+        if(check_tmp > max){
+            max = check_tmp;
+        }
+    }
+}
