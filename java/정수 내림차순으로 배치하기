@@ -1,0 +1,29 @@
+import java.util.Arrays;
+import java.util.Collections;
+
+class Solution {
+    public long solution(long n) {
+        long answer = 0;
+        //각 지릿수를 떼기 위해 long형을 String으로 바꾼다.
+        String s = String.valueOf(n);
+        String tmp = "";
+        int[] arr = new int[s.length()];
+        
+        //String으로 바꾼 문자열을 정수로 바꿔 배열에 넣어준다.
+        for(int i=0; i<s.length(); i++){
+            arr[i] = s.charAt(i) - '0';
+        }
+        
+        //배열에 넣은 값을 오름차순으로 sort한다.
+        Arrays.sort(arr);
+        
+        //정답은 내림차순이어야 하니 오름차순으로 바꾼 수를 뒤에서부터 tmp에 붙여준다.
+        for(int i=arr.length-1; i>=0; i--){
+            tmp += Integer.toString(arr[i]);
+        }
+        
+        //만든 String tmp를 long형으로 바꿔주면 끝
+        answer = Long.parseLong(tmp);
+        return answer;
+    }
+}
