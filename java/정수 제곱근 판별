@@ -1,0 +1,11 @@
+class Solution {
+    public long solution(long n) {
+        long answer = 0;
+        
+        //제곱근을 하면 double형으로 나오니까 int형으로 형변환을 해야 한다.
+        int x = (int)Math.sqrt(n);
+        
+        //제곱을 하면 double형으로 나오기 때문에 리턴 타입인 long형으로 바꿔야 한다.
+        return (n == (long)Math.pow(x, 2)) ? (long)Math.pow(x+1, 2) : -1;
+    }
+}
