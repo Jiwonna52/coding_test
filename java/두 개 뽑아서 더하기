@@ -1,0 +1,26 @@
+import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
+
+class Solution {
+    public int[] solution(int[] numbers) {
+        Set<Integer> tree = new TreeSet<Integer>();
+        
+        for(int i=0; i<numbers.length-1; i++){
+            for(int j= i+1; j< numbers.length; j++){
+                tree.add(numbers[i] + numbers[j]);
+            }
+        }
+        
+        int[] answer = new int[tree.size()];
+        Iterator iter = tree.iterator();
+        int idx = 0;
+        
+        while(iter.hasNext()){
+            answer[idx] = (int)iter.next();
+            idx++;
+        }
+        
+        return answer;
+    }
+}
