@@ -1,0 +1,24 @@
+class Solution {
+    public int solution(int[][] sizes) {
+        int answer = 0;
+        int answer_h = 0;
+        int answer_v = 0;
+        int h = 0;
+        int v = 0;
+        
+        //가로와 세로 중, 어느 한쪽이 최대이면 다른 한쪽은 최소이다.
+        //세로를 최대값으로 가로를 최소값으로 잡는다.
+        for(int i=0; i<sizes.length; i++){
+            h = Math.min(sizes[i][0], sizes[i][1]);
+            v = Math.max(sizes[i][0], sizes[i][1]);
+            
+            //이전의 값보다 구한 값이 더 크다면 answer_h를 더 큰 값으로 넣는다.
+            answer_h = Math.max(answer_h, h);
+            answer_v = Math.max(answer_v, v);
+        }
+        
+        answer = answer_h*answer_v;
+        
+        return answer;
+    }
+}
