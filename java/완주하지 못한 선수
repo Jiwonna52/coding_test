@@ -1,0 +1,32 @@
+import java.util.Map;
+import java.util.HashMap;
+
+class Solution {
+    public String solution(String[] participant, String[] completion) {
+        String answer = "";
+        Map<String, Integer> m = new HashMap<String, Integer>();
+        
+        //초기값은 0
+        for(int i=0; i<participant.length; i++){
+            m.put(participant[i], 0);
+        }
+
+        //참가한 사람들의 수를 센다.
+        for(int i=0; i<participant.length; i++){
+            m.put(participant[i], (int)(m.get(participant[i]))+1);
+        }
+        
+        //완주한 사람들은 수를 --해준다.
+        for(int i=0; i<completion.length; i++){
+            m.put(completion[i], (int)(m.get(completion[i]))-1);
+        }
+        
+        //0보다 큰 값이 있다면 이는 완주하지 못한 사람이라는 뜻이다.
+        for(int i=0; i<participant.length; i++){
+            if(m.get(participant[i]) > 0){
+                answer = participant[i];
+            }
+        }
+        return answer;
+    }
+}
