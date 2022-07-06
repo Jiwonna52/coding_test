@@ -1,0 +1,36 @@
+class Solution {
+    public int solution(int n) {
+        int answer = 0;
+        //에라토스테네스의 체를 사용
+        int[] arr = new int[n+1];
+        
+        //0과 1은 소수가 아니니 0으로 표시
+        arr[0] = 0;
+        arr[1] = 0;
+        
+        //각 위치에 해당하는 숫자를 넣어줌
+        for(int i=2; i<=n; i++){
+            arr[i] = i;
+        }
+        
+        //베열을 2부터 돌림(0과 1은 소수가 아니라 찾아봤자 의미 없다)
+        for(int i=2; i<n; i++){
+            //만일 해당하는 숫자가 소수가 아니라면 continue
+            if(arr[i] == 0){
+                continue;
+            }
+            //0이 아니라면 2부터 i를 계속 더해서 해당하는 숫자의 배수를 0으로 표시(어떤 수의 배수라는 의미는 합성수라는 의미다)
+            for(int j=2*i; j<=n; j+=i){
+                arr[j] = 0;
+            }
+        }
+        
+        //검색하면서 0이 아니라면 answer에다가 ++
+        for(int i=0; i<arr.length; i++){
+            if(arr[i] != 0){
+                answer++;
+            }
+        }
+        return answer;
+    }
+}
