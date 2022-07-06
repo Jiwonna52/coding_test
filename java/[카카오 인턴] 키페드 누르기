@@ -1,0 +1,82 @@
+import java.util.Map;
+import java.util.HashMap;
+
+class Solution {
+    public String solution(int[] numbers, String hand) {
+        String answer = "";
+        int right = 0;
+        int left = 0;
+        StringBuilder sb = new StringBuilder();
+        Map<Integer, String> map = new HashMap<Integer, String>();
+        
+        //각 번호와 좌표를 넣어준다.
+        map.put(1, "00");
+        map.put(2, "01");
+        map.put(3, "02");
+        map.put(4, "10");
+        map.put(5, "11");
+        map.put(6, "12");
+        map.put(7, "20");
+        map.put(8, "21");
+        map.put(9, "22");
+        map.put(0, "31");
+        //'*'과 '#'은 넣어줄 길이 없으니 30과 32로 대체한다.
+        map.put(30, "30");
+        map.put(32, "32");
+        
+        //right와 left의 첫 위치를 정해준다.
+        //처음부터 2, 5, 8, 0을 찍을 수 있으니 해줘야 한다. 그렇지 않으면 모든 테스트 케이스를 통과하지 못한다.
+        right = 32;
+        left = 30;
+        
+        for(int i=0; i<numbers.length; i++){
+            //왼손 엄지로 찍는 번호
+            if(numbers[i] == 1 || numbers[i] == 4 || numbers[i] == 7){
+                sb.append("L");
+                //System.out.println("press left button: " + numbers[i]);
+                left = numbers[i];
+            }
+            //왼손 엄지로 찍는 번호
+            if(numbers[i] == 3 || numbers[i] == 6 || numbers[i] == 9){
+                sb.append("R");
+                //System.out.println("press right button: " + numbers[i]);
+                right = numbers[i];
+            }
+            //가까운 엄지로 찍는 번호
+            if(numbers[i] == 2 || numbers[i] == 5 || numbers[i] == 8 || numbers[i] == 0){
+                //각 위치를 열과 행으로 분리한다.
+                String[] current = map.get(numbers[i]).split("");
+                String[] l = map.get(left).split("");
+                String[] r = map.get(right).split("");
+                
+                //거리를 계산해준다.
+                int l_far = Math.abs(Integer.parseInt(current[0]) - Integer.parseInt(l[0])) + Math.abs(Integer.parseInt(current[1]) - Integer.parseInt(l[1]));
+                int r_far = Math.abs(Integer.parseInt(current[0]) - Integer.parseInt(r[0])) + Math.abs(Integer.parseInt(current[1]) - Integer.parseInt(r[1]));
+                
+                //거리가 더 가까운 엄지로 눌러준다.
+                //만일 같다면 오른손 잡이는 오른손 엄지로, 왼손 잡이는 왼손 엄지로 눌러준다.
+                if(l_far > r_far){
+                    sb.append("R");
+                    right = numbers[i];
+                }else if(l_far < r_far){
+                    sb.append("L");
+                    left = numbers[i];
+                }else{
+                    if(hand.equals("right")){
+                        sb.append("R");
+                        right = numbers[i];
+                    }else{
+                        sb.append("L");
+                        left = numbers[i];
+                    }               
+                }
+                //System.out.println("left far " + l_far);
+                //System.out.println("right far " + r_far);
+            }
+        }
+        
+        //만들어준 StringBuilder()를 문자열로 바꿔서 answer에 넣어준다.
+        answer = sb.toString();
+        return answer;
+    }
+}
