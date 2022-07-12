@@ -1,0 +1,81 @@
+class Solution {
+    public static int N;
+    public static char[] friend;
+    public static char[] arr;
+    public static boolean[] visit;
+    public static int answer;
+    public static String[] datas;
+    
+    public int solution(int n, String[] data) {
+        answer = 0;
+        arr = new char[8];
+        visit = new boolean[8];
+        friend = new char[]{'A', 'C', 'F', 'J', 'M', 'N', 'R', 'T'};
+        datas = data;
+        N = n;
+        
+        dfs(0);
+        
+        //System.out.println(answer);
+        
+        return answer;
+    }
+    
+    public static void dfs(int depth){
+        if(depth == 8){
+            int check = 0;
+            
+            StringBuilder sb = new StringBuilder();
+            String tmp = "";
+            
+            for(char c : arr){
+                sb.append(c);
+            }
+            tmp = sb.toString();
+            
+            for(int i=0; i<N; i++){
+                char c1 = datas[i].charAt(0);
+                char c2 = datas[i].charAt(2);
+                char sign = datas[i].charAt(3);
+                int num = (datas[i].charAt(4)-'0')+1;
+                
+                int length = Math.abs(tmp.indexOf(c1) - tmp.indexOf(c2));
+                
+                if(sign == '='){
+                    if(length == num){
+                        check++;
+                    }else{
+                        break;
+                    }
+                }else if(sign == '>'){
+                    if(length > num){
+                        check++;
+                    }else{
+                        break;
+                    }
+                }else if(sign == '<'){
+                    if(length < num){
+                        check++;
+                    }else{
+                        break;
+                    }
+                }
+            }
+            
+            if(check == N){
+                answer++;
+            }
+            
+            return;
+        }
+        
+        for(int i=0; i<8; i++){
+            if(!visit[i]){
+                visit[i] = true;
+                arr[depth] = friend[i];
+                dfs(depth+1);
+                visit[i] = false;
+            }
+        }
+    }
+}
