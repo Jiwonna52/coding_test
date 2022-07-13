@@ -1,0 +1,23 @@
+class Solution {
+    public long solution(int w, int h) {
+        long answer = 0;
+        long gcd = make(w, h);
+        
+        answer  = (long)w*h - (((w/gcd) + (h/gcd)-1) *gcd);
+        return answer;
+    }
+    
+    public static int make(int a, int b){
+        
+        int min = (a < b) ? a : b;
+        int g = 0;
+        
+        for(int i=1; i<=min; i++){
+            if(a%i == 0 && b%i ==0){
+                g = i;
+            }
+        }
+        
+        return g;
+    }
+}
