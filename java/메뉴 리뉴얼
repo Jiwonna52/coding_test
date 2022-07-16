@@ -1,0 +1,99 @@
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map.Entry;
+import java.util.List;
+import java.util.ArrayList;
+
+class Solution {
+    
+    //코스를 만들어 HashMap에 넣은 후 같은 코스가 나오면 값을 더해서 그 수를 센다.
+    public static HashMap<String, Integer> map = new HashMap<String, Integer>();
+    public static char[] dfs_course;
+    public static int length;
+    public static String order;
+    public static boolean[] visit;
+    
+    public String[] solution(String[] orders, int[] course) {
+        String[] arr = new String[orders.length];
+        length = 0;
+        ArrayList<String> list = new ArrayList<String>();
+        String[] answer;
+        int idx = 0;
+        
+        //각 주문을 오름차순으로 바꾼 다음 넣어준다.
+        for(int i=0; i<orders.length; i++){
+            char[] tmp = orders[i].toCharArray();
+            Arrays.sort(tmp);
+            arr[i] = String.valueOf(tmp);
+        }
+        
+        //코스만큼 돌려주는데 내부는 먼저 정렬한 문자열을 가지고 코스를 만들어 준다.
+        //다음으로 만든 코스 중 가장 높은 빈도를 찾아준다. 여기서 중요한 점은 map에는 길이가 다양한 코스가 들어가 있으므로 해당 코스 길이의 것만 찾아준다.
+        //마지막 반복문으로 빈도가 2 이상이고 최대 빈도이면서 코스 길이가 현재 길이와 같은 코스들을 list에 넣어준다.
+        for(int i=0; i<course.length; i++){
+            int max = 0;
+            length = course[i];
+            for(int j=0; j<arr.length; j++){
+                dfs_course = new char[length];
+                order = arr[j];
+                visit = new boolean[order.length()];
+                dfs(0, 0);
+            }
+            
+            for(Entry<String, Integer> entry : map.entrySet()){
+                if(entry.getKey().length() == length){
+                    max = Math.max(max, entry.getValue());
+                }
+            }
+            
+            for(Entry<String, Integer> entry : map.entrySet()){
+                if(max >= 2 && max == entry.getValue() && entry.getKey().length() == length){
+                    //System.out.println(entry.getKey() + " " + entry.getValue());
+                    list.add(entry.getKey());
+                }
+            }
+        }
+        
+        answer = new String[list.size()];
+        
+        //리스트에 있는 값들을 배열로 옮겨준다.
+        for(String an : list){
+            answer[idx] = an;
+            idx++;
+        }
+        
+        //오름차순으로 정렬
+        Arrays.sort(answer);
+        return answer;
+    }
+    
+    public static void dfs(int idx, int depth){
+
+        //만일 원하는 길이만큼 코스가 만들어지면 해당 코스를 문자열로 변환한 후 코스가 map에 없으면 value를 1으로 넣어주고 아니면 value를 1 더해준다.
+        if(depth == length){
+            StringBuilder sb = new StringBuilder();
+            for(char tmp : dfs_course){
+                sb.append(tmp);
+            }
+            String s_tmp = sb.toString();
+            if(!map.containsKey(s_tmp)){
+                map.put(s_tmp, 1);
+            }else{
+                int count = map.get(s_tmp) + 1;
+                map.put(s_tmp, count);
+            }
+            return;
+        }
+        
+        //A, B, C가 있을 때 AB는 BA와 같은 종류로 취급하므로 idx를 이용해서 넣어야 하는 문자를 표시한다.
+        //또한 AA와 같이 반복되는 코스는 취급하지 않으므로 visit[]을 이용해서 사용된 문자인지를 확인해야 한다.
+        for(int i=idx; i<order.length(); i++){
+            if(!visit[i]){
+                visit[i] = true;
+                dfs_course[depth] = order.charAt(i);
+                dfs(i, depth+1);
+                visit[i] = false;
+            }
+        }
+    }
+}
