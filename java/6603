@@ -1,0 +1,57 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class Main {
+
+    public static boolean[] visit;
+    public static int[] num;
+    public static int[] arr;
+    public static int K;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        while(true){
+            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+            K = Integer.parseInt(st.nextToken());
+            if(K == 0){
+                break;
+            }
+
+            num = new int[K];
+            visit = new boolean[K];
+            arr = new int[6];
+
+            for(int i=0; i<K; i++){
+                num[i] = Integer.parseInt(st.nextToken());
+            }
+
+            dfs(0, 0);
+
+            System.out.println();
+        }
+
+    }
+
+    public static void dfs(int at, int depth){
+        if(depth == 6){
+            StringBuilder sb = new StringBuilder();
+            for(int tmp : arr){
+                sb.append(tmp).append(" ");
+            }
+            System.out.println(sb);
+            return;
+        }
+
+        for(int i=at; i<K; i++){
+            if(!visit[i]){
+                visit[i] = true;
+                arr[depth] = num[i];
+                dfs(i, depth+1);
+                visit[i] = false;
+            }
+        }
+    }
+}
