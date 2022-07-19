@@ -1,0 +1,59 @@
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.HashMap;
+import java.util.Collections;
+
+class Solution {
+    public int[] solution(String s) {
+        int[] answer;
+        List<Integer> list = new ArrayList<>();
+        List<Integer> length = new ArrayList<>();
+        Map<Integer, String> map = new HashMap<>();
+        String s_tmp = "";
+        int count = 1;
+        String num = "";
+        int idx = 0;
+
+        for(int i=1; i<s.length()-1; i++){
+            if(s.charAt(i) >= '0' && s.charAt(i) <= '9'){
+                s_tmp += s.charAt(i);
+                if(s.charAt(i+1) == ','){
+                    s_tmp += ',';
+                    count++;
+                    i++;
+                }
+            }
+            if(s.charAt(i) == '}'){
+                map.put(count, s_tmp);
+                length.add(count);
+                count = 1;
+                s_tmp = "";
+            }
+        }
+
+        Collections.sort(length);
+
+        for(int i : length){
+            String tmp = map.get(i);
+            String[] arr = tmp.split(",");
+            for(int j=0; j<arr.length; j++){
+                if(list.contains(Integer.parseInt(arr[j]))){
+                    continue;
+                }else{
+                    list.add(Integer.parseInt(arr[j]));
+                }
+            }
+        }
+
+        answer = new int[list.size()];
+        for(int l : list){
+            answer[idx] = l;
+            idx++;
+        }
+        //System.out.println(list);
+
+        return answer;
+    }
+}
