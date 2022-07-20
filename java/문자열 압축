@@ -1,0 +1,80 @@
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Stack;
+
+class Solution {
+    
+    public static List<String> list;
+    
+    public int solution(String s) {
+        int answer = s.length();
+        int cut = s.length()/2;
+        list = new ArrayList<>();
+        String tmp = "";
+        int length = 0;
+        int j;
+        
+        //문자열을 얼마큼 자를 것인가
+        for(int i=1; i<=cut; i++){
+            list = new ArrayList<>();
+            //i를 기준으로 자를 수 있는 곳까지 자른다.
+            //i*j는 자르는 문자열의 시작점이고 i*(j+1)은 자르는 문자열의 마지막 바로 뒷 문자열이다.
+            //j+1을 해주는 이유는 j가 0부터 시작이기 때문이다.
+            for(j=0; j<s.length()/i; j++){
+                tmp= s.substring(i*j, i*(j+1));
+                list.add(tmp);
+            }
+            //만일 덜 잘린 문자열이 존재한다면 남은 문자열을 list에 넣어준다.
+            if(s.length() > i*j){
+                list.add(s.substring(i*j));
+            }
+            
+            length = stack();
+           // System.out.println(length);
+            if(answer > length){
+                answer = length;
+            }
+        }
+        return answer;
+    }
+    
+    public static int stack(){
+        StringBuilder sb = new StringBuilder();
+        
+        Stack<String> st = new Stack<>();
+        
+        //stack이 비었으면 문자열을 하나 넣어준다.
+        //만일 넣을 문자열과 stack에 들어간 문자열이 같아면 stack에 넣어준다.
+        //넣을 문자열이 다르다면 일단 size를 붙여주고(사이즈가 1보다 클 때만) 스텍에 들어간 문자열을 하나 붙인뒤 전부 pop해준다.
+        //그리고 새로운 문자열을 넣어주면 된다.
+        for(String s_tmp : list){
+            if(st.empty()){
+                st.push(s_tmp);
+            }else{
+               if(st.peek().equals(s_tmp)){
+                    st.push(s_tmp); 
+                    }else{
+                    if(st.size() > 1){
+                        sb.append(st.size());
+                    }
+                    sb.append(st.pop());
+                    while(!st.empty()){
+                        st.pop();
+                    }
+                    st.push(s_tmp);
+                }
+            }
+        }
+        
+        //stack에 들어가 있는 나머지 문자열을 붙여준다.
+        //stack에 들어간 수가 1보다 클 때만 사이즈를 붙여준다.
+        if(st.size() > 1){
+            sb.append(st.size());
+        }
+        sb.append(st.pop());
+        
+        //System.out.println(sb.toString());
+        
+        return sb.toString().length();
+    }
+}
