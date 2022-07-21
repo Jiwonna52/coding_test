@@ -1,0 +1,49 @@
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
+
+class Solution {
+    public int solution(int[] priorities, int location) {
+        int answer = 0;
+        Queue<Integer> q = new LinkedList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        int[] arr = new int[priorities.length];
+        int idx = 0;
+        int count = 1;
+        
+        for(int i=0; i<priorities.length; i++){
+            q.add(i);
+            map.put(i, priorities[i]);
+        }
+        
+        Arrays.sort(priorities);
+        
+        for(int i = priorities.length-1; i>= 0; i--){
+            arr[idx] = priorities[i];
+            idx++;
+        }
+        
+        idx = 0;
+        
+        while(q.size() != 0){
+            int c = q.poll();
+            int cp = map.get(c);
+            
+            if(arr[idx] == cp){
+                if(c == location){
+                    answer = count;
+                    break;
+                }
+                count++;
+                idx++;
+            }else{
+                q.add(c);
+            }
+            
+        }
+        
+        return answer;
+    }
+}
