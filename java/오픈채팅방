@@ -1,0 +1,51 @@
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+
+class Solution {
+    public String[] solution(String[] record) {
+        String[] answer;
+        Map<String, String> map = new HashMap<>();
+        List<String> list = new ArrayList<>();
+        String[][] re = new String[record.length][3];        
+        String nickname = "";
+        StringBuilder sb;
+        int idx = 0;
+        
+        //먼저 문자열을 나눠서 아이디랑 넣는다.
+        for(int i=0; i<record.length; i++){
+            String[] tmp = record[i].split(" ");
+            re[i] = tmp;
+            //Leave의 경우에 길이가 2이고 닉네임이 없으므로 제외한다.
+            if(re[i].length > 2){
+                map.put(re[i][1], re[i][2]);
+            }
+        }
+        
+        for(int i=0; i<re.length; i++){
+            sb = new StringBuilder();
+            switch(re[i][0]){
+                case "Enter":
+                    nickname = map.get(re[i][1]);
+                    sb.append(nickname).append("님이 들어왔습니다.");
+                    list.add(sb.toString());
+                    break;
+                case "Leave":
+                    nickname = map.get(re[i][1]);
+                    sb.append(nickname).append("님이 나갔습니다.");
+                    list.add(sb.toString());
+                    break;
+            }
+        }
+        
+        answer = new String[list.size()];
+        
+        for(String s : list){
+            answer[idx] = s;
+            idx++;
+        }
+        
+        return answer;
+    }
+}
