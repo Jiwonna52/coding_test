@@ -1,0 +1,32 @@
+import java.util.PriorityQueue;
+import java.util.Collections;
+
+class Solution {
+    public int solution(int[] scoville, int K) {
+        int answer = 0;
+        PriorityQueue<Integer> pq = new PriorityQueue<>();
+        
+        //우선순위 큐에 값을 넣어준다.
+        for(int i=0; i<scoville.length; i++){
+            pq.add(scoville[i]);
+        }
+        
+        //pq의 사이즈가 1보다 크고 꼭대기 값이 K보다 작을 때
+        //NullPointerException이 나왔던 이유는 pq의 사이즈가 1보다 작아지면 poll이 한 번 밖에 되지 않기 때문에 그렇다.
+        while(pq.size() > 1 && pq.peek() < K){
+            int first = pq.poll();
+            int second = pq.poll();
+            int sco = first + (second*2);
+            answer++;
+            pq.add(sco);   
+        }
+        
+        //만일 while문을 마쳤는데 꼭대기 값이 여전히 K보다 작다면 이는 스코빌 지수를 못 만드는 경우다.
+        //그렇기에 answer에 -1을 대입해준다.
+        if(pq.peek() < K){
+            answer = -1;
+        }
+       
+        return answer;
+    }
+}
