@@ -1,0 +1,63 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+        double arr[] = new double[21];
+        int M = Integer.parseInt(br.readLine());
+        StringBuilder sb = new StringBuilder();
+
+        for(int i=0; i<M; i++){
+            String order = br.readLine();
+            String[] s = order.split(" ");
+
+            switch (s[0]){
+                //값을 집어 넣는 명령어 "add"
+                case "add":
+                    if(arr[Integer.parseInt(s[1])] == 0){
+                        arr[Integer.parseInt(s[1])] = 1;
+                    }
+                    break;
+                case "remove":
+                    if(arr[Integer.parseInt(s[1])] != 0){
+                        arr[Integer.parseInt(s[1])] = 0;
+                    }
+                    break;
+                case "check":
+                    if(arr[Integer.parseInt(s[1])] != 0){
+                        sb.append(1).append('\n');
+                    }else{
+                        sb.append(0).append('\n');
+                    }
+                    break;
+                case "toggle":
+                    if(arr[Integer.parseInt(s[1])] != 0){
+                        arr[Integer.parseInt(s[1])] = 0;
+                    }else{
+                        arr[Integer.parseInt(s[1])] = 1;
+                    }
+                    break;
+                case "all":
+                    for(int j=1; j<arr.length; j++){
+                        arr[j] = j;
+                    }
+                    break;
+                case "empty":
+                    for(int j=1; j<arr.length; j++){
+                        arr[j] = 0;
+                    }
+                    break;
+
+            }
+
+        }
+
+        System.out.println(sb);
+
+    }
+
+}
