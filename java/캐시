@@ -1,0 +1,39 @@
+import java.util.Map;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+
+class Solution {
+    public int solution(int cacheSize, String[] cities) {
+        int answer = 0;
+        //LRU, 가장 오랫동안 사용되지 않는 페이지를 삭제하는 방법
+        //캐시 사이즈를 넘으면 제일 뒤에 있는 것을 하나 삭제한다.
+        LinkedList<String> cache = new LinkedList<>();
+        
+        if(cacheSize == 0){
+            return cities.length * 5;
+        }
+        
+        for(int i=0; i<cities.length; i++){
+            //대소문자를 구분하지 않기 때문에 전부 대문자로 바꿔준다.
+            String current = cities[i].toUpperCase();
+            //hit
+            if(cache.contains(current)){
+                answer += 1;
+                cache.remove(current);
+                cache.addFirst(current);
+            }else{
+                //miss이고 캐시가 다 찬 경우
+                if(cache.size() == cacheSize){
+                    //맨 마지막에 있는 것을 제거한다.
+                    //remove의 경우 리스트가 비었을 경우 NoSuchElementException을 반환하지만 poll은 null을 반환한다.
+                    //cacheSize()가 0일 경우 'return cities.length * 5;'을 하지 않는다면 NoSuchElementException이 나온다.
+                    cache.removeLast();
+                }
+                cache.addFirst(current);
+                answer += 5;
+            }
+        }
+        
+        return answer;
+    }
+}
