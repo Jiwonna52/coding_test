@@ -1,0 +1,108 @@
+import java.util.List;
+import java.util.ArrayList;
+
+class Solution {
+    public static List<String> list;
+    public static boolean[] visit;
+    public static int[] arr;
+    public static char[][] room;
+    public static boolean check;
+
+    public int[] solution(String[][] places) {
+        int[] answer = new int[5];
+        int count = 0;
+        check = true;
+
+        while(count != 5){
+            list = new ArrayList<String>();
+            room = new char[5][5];
+
+            for(int i=0; i<5; i++){
+                String tmp = places[count][i];
+                for(int j=0; j<5; j++){
+                    room[i][j] = tmp.charAt(j);
+                    if(tmp.charAt(j) == 'P'){
+                        StringBuilder sb = new StringBuilder();
+                        sb.append(i).append(j);
+                        list.add(sb.toString());
+                    }
+                }
+            }
+
+            visit = new boolean[list.size()];
+            arr = new int[2];
+
+            if(list.size() != 0){
+                dfs(0, 0);
+            }
+
+            if(check){
+                answer[count] = 1;
+            }else{
+                answer[count] = 0;
+            }
+
+            check = true;
+            count++;
+        }
+
+        return answer;
+    }
+
+    public static void dfs(int at, int depth){
+        if(depth == 2){
+            String first = list.get(arr[0]);
+            String second = list.get(arr[1]);
+            int r1 = first.charAt(0) - '0';
+            int c1 = first.charAt(1) - '0';
+            int r2 = second.charAt(0) - '0';
+            int c2 = second.charAt(1) - '0';
+
+            int manh = (Math.abs(r1 - r2)) + (Math.abs(c1 - c2));
+
+            if(manh <= 2){
+                if(r1 == r2){
+                    if(Math.abs(c1-c2) == 1){
+                        check = false;
+                    }else{
+                        if(room[r1][c1+1] != 'X'){
+                            check = false;
+                        }
+                    }
+                }else if(r1 != r2){
+                    if(c1 == c2){
+                        if(Math.abs(r1-r2) == 1){
+                            check= false;
+                        }else{
+                            if(room[r1+1][c1] != 'X'){
+                                check = false;
+                            }
+                        }
+
+                    }else{
+                        if(c1 < c2){
+                            if((room[r1][c1+1] != 'X') || (room[r1+1][c1] != 'X')){
+                                check = false;
+                            }
+                        }else if(c1 > c2){
+                            if((room[r1][c1-1] != 'X') || (room[r1+1][c1] != 'X')){
+                                check = false;
+                            }
+                        }
+                    }
+
+                }
+            }
+            return;
+        }
+
+        for(int i=at; i<list.size(); i++){
+            if(!visit[i]){
+                visit[i] = true;
+                arr[depth] = i;
+                dfs(i+1, depth+1);
+                visit[i] = false;
+            }
+        }
+    }
+}
