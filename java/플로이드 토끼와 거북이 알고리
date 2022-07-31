@@ -1,0 +1,47 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.StringTokenizer;
+
+public class Main {
+    public static void mian(String[] args) throws IOException{
+        //중복되는 수 찾기, 플로이드의 거북이와 토끼 알고리즘
+        //중복되눈 수는 즉, 그래프에서 순환을 의미한다.
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        int[] arr = new int[N];
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        int idx = 0;
+
+        while(st.hasMoreTokens()){
+            arr[idx] = Integer.parseInt(st.nextToken());
+            idx++;
+        }
+
+        //거북이와 토끼가 시작 위치에 선다.
+        int t = arr[0];
+        int h = arr[0];
+
+        //거북이는 한 칸 씩 이동하고 토끼는 두 칸 씩 이동한다.
+        while(true){
+            t = arr[t];
+            h = arr[arr[h]];
+            if(t == h){
+                break;
+            }
+        }
+
+        //거북이를 처음으로 돌려보낸다.
+        int tt = arr[0];
+        int hh = h;
+
+        //거북이와 토끼 모두 한 칸 씩 움직인다.
+        while (tt != hh){
+            tt = arr[tt];
+            hh = arr[hh];
+        }
+
+        System.out.println(tt);
+
+    }
+}
