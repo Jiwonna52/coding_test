@@ -1,0 +1,83 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
+import java.util.Queue;
+
+public class Main {
+    public static int[][] link;
+    public static boolean[] visit;
+    public static int[] node;
+    public static int N;
+    public static int V;
+
+    public static void main(String[] args) throws IOException{
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        V = Integer.parseInt(st.nextToken());
+
+        link = new int[1001][1001];
+        node = new int[N+1];
+        visit = new boolean[1001];
+
+        for(int i=0; i<M; i++){
+            String[] num = br.readLine().split(" ");
+            int a = Integer.parseInt(num[0]);
+            int b = Integer.parseInt(num[1]);
+            link[a][b] = 1;
+            link[b][a] = 1;
+        }
+
+        dfs(V);
+
+        System.out.println();
+        visit = new boolean[1001];
+
+        bfs();
+    }
+
+    //깊이 우선 탐색(한쪽 루트를 전부 타고 내려갔다가 막다른 길이 나오면 위로 올라가는 방식)
+    public static void dfs(int current){
+        //현재 노드를 방문했다고 표시한 후 출력
+        visit[current] = true;
+        System.out.print(current + " ");
+
+        //반복문을 돌리면서 해당 노드와 연관된 노드들 중 방문되지 않은 노드를 찾아 깊이 우선 탐색을 재귀를 통해 진행한다.
+        for(int i=1; i<=N; i++){
+            if(link[current][i] == 1 && !visit[i]){
+                dfs(i);
+            }
+        }
+    }
+
+    //넓이 우선 탐색(해당하는 노드와 연결된 모든 노드를 넣어두고 하나씩 탐색하는 방식)
+    public static void bfs(){
+        Queue<Integer> queue = new LinkedList<Integer>();
+        //시작 노드를 큐에 넣어준다.
+        queue.add(V);
+        //해당 시작 노드를 방문 했음 표시를 해준다.
+        visit[V] = true;
+        System.out.print(V + " ");
+
+        //큐에는 해당 노드의 인접 노드를 전부 넣어준다.
+        while(!queue.isEmpty()){
+            //제일 앞에 있는(해당 노드와 노드의 숫자가 가까운) 노드를 tmp로 꺼낸다.
+            int tmp = queue.poll();
+
+            //해당 노드와 연결이 되어 있으면서 방문하지 않은 노드들을 큐에 넣고 노드를 방문했음으로 표시한다.
+            for(int i = 1; i<= N; i++){
+                if(link[tmp][i] == 1 && !visit[i]){
+                    queue.add(i);
+                    visit[i] = true;
+                    System.out.print(i + " ");
+                }
+            }
+
+        }
+
+    }
+
+}
