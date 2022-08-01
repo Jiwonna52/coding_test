@@ -1,0 +1,126 @@
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+
+//dfs를 이용해서 조합을 구한다.
+class Solution {
+    
+    public static int stop;
+    public static int col;
+    public static int row;
+    public static boolean[] visit;
+    public static List<String>[] list;
+    public static int answer;
+    public static List<String> all;
+
+    public int solution(String[][] relation) {
+        answer = 0;
+        //4개, 속성
+        col = relation[0].length;
+        //5개, 튜플
+        row = relation.length;
+        visit = new boolean[col];
+        list = new ArrayList[row];
+        all = new ArrayList<>();
+
+        for(int i=0; i<row; i++){
+            list[i] = new ArrayList<>();
+        }
+        
+        for(int i=0; i<col; i++){
+            for(int j=0; j<row; j++){
+                list[i].add(relation[j][i]);
+            }
+        }
+        
+        //System.out.println(list[0]);
+        
+        for(stop=1; stop<=col; stop++){
+            dfs(0, 0);
+        }
+        
+        return answer;
+    }
+    
+    public static void dfs(int at, int depth){
+        if(depth == stop){
+            String num = "";
+            List<String> contain = new ArrayList<>();
+            String[] s = new String[row];
+            
+            for(int i=0; i<row; i++){
+                s[i] = "";
+            }
+            
+            for(int i=0; i<visit.length; i++){
+                if(visit[i]){
+                    num += String.valueOf(i);
+                    for(int j=0; j<row; j++){
+                        StringBuilder sb = new StringBuilder();
+                        if(!(s.equals(""))){
+                            sb.append(s[j]).append(list[i].get(j));
+                            s[j] = sb.toString();
+                        }else{
+                            s[j] = list[i].get(j);
+                        }
+                        //String tmp = s[j];
+                        //tmp += list[i].get(j);
+                        //s[j] = ;                   
+                    }
+                    
+                    //System.out.print(list[i]);
+                }                
+            }
+            System.out.println(s[0]);
+            //System.out.println(num);
+            //유일성 검사
+            for(String t : s){
+                if(contain.contains(t)){
+                    return;
+                }else{
+                    contain.add(t);
+                }
+            }
+            
+            boolean flag = true;
+            
+            for(String a : all){
+                int count = 0;
+                //String[] arr = a.split("");
+                for(int i=0; i<a.length(); i++){
+                    if(num.contains(String.valueOf(a.charAt(i)))){
+                        count++;
+                    }
+                }
+                if(a.length() == count){
+                    flag = false;
+                    break;
+                }
+                //if(num.contains(a)){
+                    //flag = false;
+                    //break;
+                //}
+            }
+            
+            if(flag){
+                //System.out.println(num);
+                all.add(num);
+                answer++;
+            }
+
+            //System.out.println();
+
+            return;
+        }
+        
+        for(int i=at; i<col; i++){
+            if(!visit[i]){
+                visit[i] = true;  
+                dfs(i+1, depth+1);
+                visit[i] = false;
+            }
+        }
+    }
+    
+}
