@@ -1,0 +1,54 @@
+class Solution {
+    public static int num;
+    public static boolean[] visit;
+    public static int[] arr;
+    public static int K;
+    public static int[][] d;
+    public static int answer;
+    
+    public int solution(int k, int[][] dungeons) {
+        answer = -1;
+        num = dungeons.length;
+        visit = new boolean[num];
+        arr = new int[num];
+        d = dungeons;
+        K = k;
+        dfs(0);
+        
+        return answer;
+    }
+    
+    public static void dfs(int depth){
+        if(depth == num){
+            int tmp = cal();
+            if(answer < tmp){
+                answer = tmp;
+            }
+            
+            return;
+        }
+        
+        for(int i=0; i<num; i++){
+            if(!visit[i]){
+                visit[i] = true;
+                arr[depth] = i;
+                dfs(depth+1);
+                visit[i] = false;
+            }
+        }
+    }
+    
+    public static int cal(){
+        int count = 0;
+        int tmp = K;
+        
+        for(int i=0; i<arr.length; i++){
+            if(d[arr[i]][0] <= tmp){
+                count++;
+                tmp -= d[arr[i]][1];
+            }
+        }
+        return count;
+    }
+    
+}
