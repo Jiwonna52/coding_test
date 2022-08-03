@@ -47,7 +47,7 @@ public class Main {
         }
     }
 
-    //넓이 우선 탐색
+    //깊이 우선 탐색
     public static int dfs(int x, int y){
         visit[x][y] = true;
 
