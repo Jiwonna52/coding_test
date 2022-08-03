@@ -1,0 +1,32 @@
+import java.util.List;
+import java.util.ArrayList;
+
+
+class Solution {
+    public int[] solution(int n, String[] words) {
+        int[] answer = new int[2];
+        String pre = words[0];
+        int idx = 1;
+        int count = 1;
+        List<String> list = new ArrayList<>();
+        list.add(pre);
+        
+        for(int i=1; i<words.length; i++){
+            idx++;
+            if(idx > n){
+                idx = 1;
+                count++;
+            }
+            if(list.contains(words[i]) || (pre.charAt(pre.length()-1) != words[i].charAt(0))){
+                answer[0] = idx;
+                answer[1] = count;
+                break;
+            }else{
+                list.add(words[i]);
+            }
+            pre = words[i];
+        }
+
+        return answer;
+    }
+}
