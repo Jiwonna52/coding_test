@@ -1,0 +1,72 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+class pair{
+    int x;
+    int y;
+    pair(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+}
+public class Main {
+
+    public static boolean[][] visit;
+    public static int[][] map;
+    public static int[][] count;
+    public static int[] nr = { -1, 1, 0,  0};
+    public static int[] nc = {0, 0, -1, 1};
+    public static int N;
+    public static int M;
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+        visit = new boolean[N][M];
+        map = new int[N][M];
+        count = new int[N][M];
+
+        for(int i=0; i<N; i++){
+            String s = br.readLine();
+            for(int j=0; j<s.length(); j++){
+                map[i][j] = s.charAt(j) - '0';
+            }
+        }
+
+        BFS(0, 0);
+
+        System.out.println(count[N-1][M-1]);
+
+    }
+
+    static public void BFS(int x, int y) {
+        Queue<pair> queue = new LinkedList<pair>();
+        queue.add(new pair(x, y));
+        visit[x][y] = true;
+        count[x][y] = 1;
+
+        while(!queue.isEmpty()){
+            pair p = queue.poll();
+            int xp = p.x;
+            int yp = p.y;
+
+            for(int i=0; i<4; i++){
+                int nextx = xp + nr[i];
+                int nexty = yp + nc[i];
+
+                if(nextx >= 0 && nexty >= 0 && nextx < N && nexty < M) {
+                    if(map[nextx][nexty] == 1 && !visit[nextx][nexty]){
+                        queue.add(new pair(nextx, nexty));
+                        visit[nextx][nexty] = true;
+                        count[nextx][nexty] = count[xp][yp] + 1;
+                    }
+                }
+
+            }
+        }
+    }
+}
