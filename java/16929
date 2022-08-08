@@ -1,0 +1,76 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+class pair{
+    int x;
+    int y;
+    pair(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+}
+public class Main {
+
+    public static char[][] map;
+    public static boolean[][] visit;
+    public static int[] dr = { 0, 0, -1,  1};
+    public static int[] dc = {-1, 1, 0, 0};
+    public static int N, M;
+    public static int start_r, start_c;
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+
+
+        map = new char[N][M];
+
+        for(int i=0; i<N; i++){
+            String s = br.readLine();
+            for(int j=0; j<M; j++){
+                map[i][j] = s.charAt(j);
+            }
+        }
+
+        for(int i=0; i<N; i++){
+            for(int j=0; j<M; j++){
+                visit = new boolean[N][M];
+                start_r = i;
+                start_c = j;
+                if(DFS(i, j, 1)){
+                    System.out.println("Yes");
+                    return;
+                }
+            }
+        }
+
+        System.out.println("No");
+
+    }
+
+    static public boolean DFS(int r, int c, int count) {
+
+        visit[r][c] = true;
+
+        for(int i=0; i<4; i++){
+            int nextr = r + dr[i];
+            int nextc = c + dc[i];
+            if(nextr >= 0 && nextc >= 0 && nextr < N && nextc < M && map[r][c] == map[nextr][nextc]){
+                if(!visit[nextr][nextc]){
+                    visit[nextr][nextc] = true;
+                    if(DFS(nextr, nextc, count+1)){
+                        return true;
+                    }
+                }else{
+                    if(count >= 4 && start_r == nextr && start_c == nextc){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+}
