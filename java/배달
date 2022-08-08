@@ -1,0 +1,47 @@
+class Solution {
+    
+    public int solution(int N, int[][] road, int K) {
+        int answer = 0;
+        int[][] r = new int[N][N];
+        
+        for(int i=0; i<N; i++){
+            for(int j=0; j<N; j++){
+                if(i != j){
+                    r[i][j] = 500001;
+                }
+            }
+        }
+        
+        for(int i=0; i<road.length; i++){
+            int a = road[i][0]-1;
+            int b = road[i][1]-1;
+            int c = road[i][2];
+            
+            if(r[a][b] < road[i][2]){
+                continue;
+            }
+            
+            r[a][b] = c;
+            r[b][a] = c;
+        }
+        
+        for(int m=0; m<N; m++){
+            for(int s=0; s<N; s++){
+                for(int e=0; e<N; e++){
+                    if(r[s][e] > r[s][m] + r[m][e]){
+                        r[s][e] = r[s][m] + r[m][e];
+                    }
+                }
+            }
+        }
+        
+        for(int i=0; i<r.length; i++){
+            if(r[0][i] <= K){
+                answer++;
+            }
+        }
+
+        return answer;
+    }
+
+}
