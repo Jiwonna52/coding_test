@@ -1,0 +1,34 @@
+class Solution {
+    public int[] solution(String s) {
+        int[] answer = new int[2];
+        int zero = 0;
+        int count = 0;
+        String num = s;
+        int length = 0;
+        
+        while(true){
+            StringBuilder sb = new StringBuilder();
+            
+            if(num.equals("1")){
+                answer[0] = count;
+                answer[1] = zero;
+                break;
+            }
+            
+            for(int i=0; i<num.length(); i++){
+                if(num.charAt(i) == '0'){
+                    zero++;
+                }else{
+                    sb.append(s.charAt(i));
+                }
+            }
+            
+            length = sb.toString().length();
+            num = Integer.toBinaryString(length);
+            count++;
+            
+        }
+        
+        return answer;
+    }
+}
