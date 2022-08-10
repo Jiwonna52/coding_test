@@ -1,0 +1,84 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+
+    public static List<Integer>[] map;
+    public static boolean[] visit;
+    public static int N;
+    public static int[] answer;
+    public static int idx;
+    public static boolean flag;
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        answer = new int[N];
+        visit = new boolean[N+1];
+        idx = 1;
+        flag = true;
+
+        map = new ArrayList[N+1];
+        for(int i=0; i<N+1; i++){
+            map[i] = new ArrayList<>();
+        }
+
+        for(int i=0; i<N-1; i++){
+            StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            map[a].add(b);
+            map[b].add(a);
+        }
+
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        for(int i=0; i<N; i++){
+           answer[i] = Integer.parseInt(st.nextToken());
+        }
+
+        if(answer[0] != 1){
+            System.out.println("0");
+            return;
+        }
+
+        DFS(1);
+
+        if(flag){
+            System.out.println("1");
+        }else{
+            System.out.println("0");
+        }
+
+        return;
+    }
+
+    static public void DFS(int node) {
+        //만일 현재 노드를 이미 방문했다면 return으로 메소드 끝내고 다음 메소드로 넘어감
+        if(visit[node]){
+            return;
+        }
+        visit[node] = true;
+        HashSet<Integer> set = new HashSet<>();
+
+        //현재 노드 바로 밑 레벨에 있는 노드들을 모두 넣어준다.
+        for(int next : map[node]){
+            if(visit[next]){
+                continue;
+            }
+            set.add(next);
+        }
+
+        //맨 마지막 레벨의 노드라면 return해서 아직 마무리가 안 된 메소드로 넘어간다.
+        if(set.size() == 0){
+            return;
+        }
+
+        //set에 넣어준 레벨의 값이 answer[idx]에 존재한다면 다음 레벨의 값을 검사한다.
+        if(set.contains(answer[idx])){
+            DFS(answer[idx++]);
+        }else{
+            flag = false;
+        }
+   }
+}
