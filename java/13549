@@ -1,0 +1,63 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+    public static boolean[] visit;
+    public static int[] count;
+    public static int[] parent;
+    public static int K;
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        int N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        visit = new boolean[100001];
+        count = new int[100001];
+        parent = new int[100001];
+
+        BFS(N);
+        System.out.println(count[K]);
+
+        return;
+    }
+
+    static public void BFS(int first_node) {
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(first_node);
+        count[first_node] = 0;
+        visit[first_node] = true;
+
+        while(!queue.isEmpty()){
+            int current = queue.poll();
+
+            if(current == K){
+                break;
+            }
+
+            int front_one = current+1;
+            int two = current*2;
+            int back_one = current-1;
+
+            if(two < 100001 && !visit[two]){
+                count[two] = count[current];
+                visit[two] = true;
+                queue.add(two);
+            }
+
+            if(back_one >= 0 && !visit[back_one]){
+                count[back_one] = count[current] + 1;
+                visit[back_one] = true;
+                queue.add(back_one);
+            }
+            
+            if(front_one < 100001 && !visit[front_one]){
+                count[front_one] = count[current] + 1;
+                visit[front_one] = true;
+                queue.add(front_one);
+            }
+            
+        }
+    }
+}
