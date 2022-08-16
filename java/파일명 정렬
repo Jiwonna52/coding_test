@@ -1,0 +1,54 @@
+import java.util.*;
+
+class Solution {
+    public String[] solution(String[] files) {
+        Arrays.sort(files, new Comparator<String>(){
+            @Override
+            public int compare(String e1, String e2){
+                String[] one = make(e1);
+                String[] two = make(e2);
+                
+                int headvalue = one[0].compareTo(two[0]); //head를 비교한다.
+                    if(headvalue == 0){//만일 head가 같다면 number을 비교한다.
+                        int num1 = Integer.parseInt(one[1]);
+                        int num2 = Integer.parseInt(two[1]);
+                        return num1 - num2;
+                    }else{
+                        return headvalue;
+                    }
+            }
+            
+            private String[] make(String str){
+                String head = "";
+                String number = "";
+                String tail = "";
+                
+                int idx = 0;
+                
+                for(; idx < str.length(); idx++){
+                    if(str.charAt(idx) >= '0' && str.charAt(idx) <= '9'){
+                        break;
+                    }
+                    head += str.charAt(idx);
+                }
+                
+                for(; idx<str.length(); idx++){
+                    if(!(str.charAt(idx) >= '0' && str.charAt(idx) <= '9')){
+                        break;
+                    }
+                    number += str.charAt(idx);
+                }
+                
+                for(; idx<str.length(); idx++){
+                    tail += str.charAt(idx);
+                }
+                
+                String[] file = {head.toLowerCase(), number, tail};
+                
+                return file;
+            }
+        });
+        
+        return files;
+    }
+}
