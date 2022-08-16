@@ -1,0 +1,36 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class Solution {
+    public static List<String> list;
+    
+    public int[][] solution(int n) {
+        int[][] answer = {};
+        list = new ArrayList<>();
+        int idx = 0;
+        
+        hanoi(n, 1, 2, 3);
+        
+        answer = new int[list.size()][2];
+        
+        for(String s : list){
+            answer[idx][0] = s.charAt(0) - '0';
+            answer[idx][1] = s.charAt(1) - '0';
+            idx++;
+        }
+        
+        return answer;
+    }
+    
+    public static void hanoi(int n, int a, int b, int c){
+        if(n == 1){ //만일 원판이 하나 남았다면 원판을 a에서 c로 옮긴다.
+            list.add(Integer.toString(a) + Integer.toString(c));
+            //System.out.println("원판을 " + a + "에서 " + c + "로 옮긴다.");
+            return;
+        }
+        hanoi(n-1, a, c, b); //n-1개를 a에서 b로 옮긴다.
+        list.add(Integer.toString(a) + Integer.toString(c)); //a에 있는 원판 하나를 a에서 c로 옮긴다.
+        //System.out.println("원판을 " + a + "에서 " + c +"로 옮긴다.");
+        hanoi(n-1, b, a, c); //n-1개를 b에서 c로 옮긴다.
+    }
+}
