@@ -1,0 +1,108 @@
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+
+class Solution {
+    public int[] solution(int[] fees, String[] records) {
+        int[] answer = {};
+        int idx = 0;
+        Map<Integer, String> car = new HashMap<>();
+        Map<Integer, Integer> time = new HashMap<>();
+        Map<Integer, Integer> money = new HashMap<>();
+        List<Integer> car_number = new ArrayList<>();
+        
+        for(int i=0; i<records.length; i++){
+            String[] tmp = records[i].split(" ");
+            if(tmp[2].equals("IN")){
+                car.put(Integer.parseInt(tmp[1]), tmp[0]);
+                
+                if(!car_number.contains(Integer.parseInt(tmp[1]))){
+                    car_number.add(Integer.parseInt(tmp[1]));
+                }
+                
+            }else if(tmp[2].equals("OUT")){
+                String[] in = car.get(Integer.parseInt(tmp[1])).split(":");
+                String[] out = tmp[0].split(":");
+                int inH = Integer.parseInt(in[0]);
+                int inM = Integer.parseInt(in[1]);
+                int outH = Integer.parseInt(out[0]);
+                int outM = Integer.parseInt(out[1]);
+                
+                int tmpM = 0;
+                int tmpH = 0;
+                tmpM = 60 - inM + outM;
+                if(tmpM >= 60){
+                    tmpM -= 60;
+                }
+                if(inM > outM){
+                    outH -= 1;
+                }
+                tmpH = outH - inH;
+                int total = 60*tmpH + tmpM;
+                
+                if(time.containsKey(Integer.parseInt(tmp[1]))){
+                    int t = time.get(Integer.parseInt(tmp[1]));
+                    time.put(Integer.parseInt(tmp[1]), t + total);
+                }else{
+                    time.put(Integer.parseInt(tmp[1]), total);
+                }
+
+                car.remove(Integer.parseInt(tmp[1]));
+            }
+        }
+        
+        for(int key : car.keySet()){
+            String[] in = car.get(key).split(":");
+            int H = Integer.parseInt(in[0]);
+            int M = Integer.parseInt(in[1]);
+            
+            int leftM = 60 - M + 59;
+            int leftH = 23 - H;
+            if(leftM >= 60){
+                leftM -= 60;
+            }
+            int total = (60*leftH + leftM);
+            
+            if(time.containsKey(key)){
+                time.put(key, total + time.get(key));
+            }else{
+                time.put(key, total);
+            }
+            
+        }
+        
+        for(int key : time.keySet()){
+            int t = time.get(key);
+            int pay = fees[1];
+
+            if(fees[0] < t){
+                if((t-fees[0])%fees[2] != 0){
+                    pay += (((t-fees[0])/fees[2]) +1) * fees[3];
+                }else{
+                    pay += ((t-fees[0])/fees[2]) * fees[3];
+                }
+            }
+            money.put(key, pay);
+            //System.out.println("Key: " + key + " 내야할 돈: " + pay);
+        }
+        
+        Collections.sort(car_number);
+        
+        answer = new int[car_number.size()];
+        
+        for(int key : car_number){
+            if(money.containsKey(key)){
+                answer[idx] = money.get(key);
+                idx++;
+            }
+            //System.out.println(key);
+        }
+        
+        //for(int key : time.keySet()){
+            //System.out.println("key: " + key + " value: " + time.get(key));
+        //}
+        return answer;
+    }
+}
