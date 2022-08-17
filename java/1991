@@ -1,0 +1,112 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+class node{
+    char data; //해당 노드의 데이터
+    node left; //해당 노드의 왼쪽 노드
+    node right; //해당 노드의 오른쪽 노드
+
+    node(char data){
+        this.data = data;
+    }
+
+}
+
+class treeOrderClass{
+    public static node root;
+
+    public void createTree(char data, char leftData, char rightData){
+        if(root == null){ //root가 없다면 root를 새로 생성한다.
+            root = new node(data);
+            if(leftData != '.'){ //왼쪽 노드가 공백이 아니라면 왼쪽 노드를 설정한다.
+                root.left = new node(leftData);
+            }
+            if(rightData != '.'){ //오른쪽 노드가 공백이 아니라면 오른쪽 노드를 설정한다.
+                root.right = new node(rightData);
+            }
+        }else{ //root가 존재한다면 searchnode를 해서 해당 노드를 찾는다.
+            searchNode(root, data, leftData, rightData);
+        }
+    }
+
+    public static void searchNode(node n, char data, char leftData, char rightData){
+        if(n == null){ //노드가 null이라 찾을 노드가 없다면 메소드 종료
+            return;
+        }else if(n.data == data){ //해당 노드가 존재하면 왼쪽 노드와 오른쪽 노드를 설정함
+            if(leftData != '.'){
+                n.left = new node(leftData);
+            }
+            if(rightData != '.'){
+                n.right = new node(rightData);
+            }
+        }else{ //존재하지 않다면 왼쪽 노드로 탐색하고 오른쪽 노드로 탐색함
+            searchNode(n.left, data, leftData, rightData);
+            searchNode(n.right, data, leftData, rightData);
+        }
+    }
+
+    public static void preOrder(node n){ //전위순회, Root->Left->Right
+        if(n != null){ //해당 노드가 null이 아니라면
+            System.out.print(n.data); //해당 노드를 탐색함
+            if(n.left != null){ //왼쪽 노드가 존재한다면 왼쪽 노드를 탐색함
+                preOrder(n.left);
+            }
+            if(n.right != null){ //오른쪽 노드가 존재한다면 오른족 노드를 탐색함
+                preOrder(n.right);
+            }
+        }
+    }
+
+    public static void inOrder(node n){ //중위순회, Left->Root->Right
+        if(n != null){
+            if(n.left != null){
+                inOrder(n.left);
+            }
+            System.out.print(n.data);
+            if(n.right != null){
+                inOrder(n.right);
+            }
+        }
+    }
+
+    public void postOrder(node n){ //후위순회, Left->Right->Root
+        if(n != null){
+            if(n.left != null){
+                postOrder(n.left);
+            }
+            if(n.right != null){
+                postOrder(n.right);
+            }
+            System.out.print(n.data);
+        }
+
+    }
+}
+
+public class Main {
+    public static int N;
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        treeOrderClass tree = new treeOrderClass();
+
+        for(int i=0; i<N; i++){
+            String tmp = br.readLine();
+            char[] charArray = tmp.toCharArray();
+            for(char ch : charArray){
+                tree.createTree(charArray[0], charArray[2], charArray[4]);
+            }
+        }
+
+        tree.preOrder(tree.root);
+        System.out.println();
+        tree.inOrder(tree.root);
+        System.out.println();
+        tree.postOrder(tree.root);
+
+        return;
+    }
+    
+}
