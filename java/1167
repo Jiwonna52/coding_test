@@ -1,0 +1,80 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+//https://blog.myungwoo.kr/112
+class node{
+    int data;
+    int length;
+
+    node(int data, int length){
+        this.data = data;
+        this.length = length;
+    }
+
+}
+
+public class Main {
+    public static int N;
+    public static int answer;
+    public static List<node>[] map;
+    public static boolean[] visit;
+    public static int n;
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+        answer = 0;
+        int idx = 1;
+        int a, b, c;
+
+        map = new ArrayList[N+1];
+        for(int i=0; i<N+1; i++){
+            map[i] = new ArrayList<node>();
+        }
+
+        for(int i=0; i<N; i++){
+            String[] tmp = br.readLine().split(" ");
+            a = Integer.parseInt(tmp[0]);
+            while(Integer.parseInt(tmp[idx]) != -1){
+                b = Integer.parseInt(tmp[idx]);
+                c = Integer.parseInt(tmp[idx+1]);
+                map[a].add(new node(b, c));
+                idx += 2;
+            }
+            idx = 1;
+        }
+
+        //처음 노드 A에서부터 제일 먼 노드 B를 찾는다.
+        visit = new boolean[N+1];
+        DFS(1, 0);
+
+        //노드 B에서부터 제일 먼 노드 C를 찾는다.
+        visit = new boolean[N+1];
+        DFS(n, 0);
+
+        System.out.println(answer);
+
+        return;
+    }
+
+    public static void DFS(int data, int len){
+
+        visit[data] = true;
+        //각 노드를 검사하면서 지름을 구함
+        for(node n : map[data]){
+            if(!visit[n.data]){
+                visit[n.data] = true;
+                DFS(n.data, n.length+len);
+            }
+        }
+
+        if(len > answer){
+            answer = len;
+            n = data;
+        }
+
+        return;
+    }
+
+}
