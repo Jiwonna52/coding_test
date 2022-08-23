@@ -1,0 +1,51 @@
+import java.util.Map;
+import java.util.HashMap;
+
+class Solution {
+    public static StringBuilder sb;
+    public static Map<Character, Integer> map;
+    
+    public String solution(String[] survey, int[] choices) {
+        String answer = "";
+        sb = new StringBuilder();
+        map = new HashMap<>();
+        int tmp = 0;
+        map.put('R', 0);
+        map.put('T', 0);
+        map.put('C', 0);
+        map.put('F', 0);
+        map.put('J', 0);
+        map.put('M', 0);
+        map.put('A', 0);
+        map.put('N', 0);
+        
+        for(int i=0; i<survey.length; i++){
+            if(choices[i] < 4){
+                tmp = map.get(survey[i].charAt(0)) + (4-choices[i]);
+                map.put(survey[i].charAt(0), tmp);
+            }
+            if(choices[i] > 4){
+                tmp = map.get(survey[i].charAt(1)) + (choices[i]-4);
+                map.put(survey[i].charAt(1), tmp);
+            }  
+        }
+        
+        check("RT");
+        check("CF");
+        check("JM");
+        check("AN");
+        
+        answer = sb.toString();
+        
+        return answer;
+    }
+    
+    public static void check(String s){
+        if(map.get(s.charAt(0)) >= map.get(s.charAt(1))){
+            sb.append(s.charAt(0));
+        }
+        if(map.get(s.charAt(0)) < map.get(s.charAt(1))){
+            sb.append(s.charAt(1));
+        }
+    }
+}
