@@ -1,0 +1,35 @@
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+
+class Solution {
+    public String solution(int n) {
+        String answer = "";
+        int idx = 0;
+        String[] num = {"4", "1", "2"};
+        List<String> list = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        
+        while(n != 0){
+            idx = n%3;
+            n /= 3;
+            
+            //3으로 나눠떨어질 경우
+            if(idx == 0){
+                n--;
+            }
+            
+            list.add(num[idx]);
+        }
+        
+        Collections.reverse(list);
+        
+        for(String l : list){
+            sb.append(l);
+        }
+        
+        answer = sb.toString();
+        return answer;
+    }
+    
+}
