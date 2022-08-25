@@ -1,0 +1,47 @@
+class Solution {
+    public static int[] arr;
+    public static int N;
+    public static int answer;
+    public static int count;
+    
+    public int solution(int n) {
+        answer = 0;
+        //각 인덱스를 열, 해당 인덱스의 값을 행으로
+        arr = new int[n];
+        N = n;
+        
+        NQueen(0);
+        
+        return answer;
+    }
+    
+    public static void NQueen(int depth){
+        if(depth == N){
+            answer++;
+            return;
+        }
+        
+        for(int i=0; i<N; i++){
+            //depth를 열, i를 행
+            arr[depth] = i;
+            if(possibility(depth)){
+                NQueen(depth+1);
+            }
+        }
+         
+    }
+    
+    public static boolean possibility(int col){
+        for(int i=0; i<col; i++){
+            //만일 각 열의 행이 일치하면 여기에는 queen을 놓을 수 없다.
+            if(arr[col] == arr[i]){
+                return false;
+            }
+            //열의 차와 행의 차가 같을 경우 이는 대각선에 존재하는 것이므로 queen을 놓을 수 없다.
+            else if(Math.abs(col-i) == Math.abs(arr[col] - arr[i])){
+                return false;
+            }
+        }
+        return true;
+    }
+}
