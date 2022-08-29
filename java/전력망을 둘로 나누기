@@ -1,0 +1,70 @@
+import java.util.Queue;
+import java.util.LinkedList;
+
+class Solution {
+    public static int[][] map;
+    public static boolean[] visit;
+    public static int N;
+    
+    public int solution(int n, int[][] wires) {
+        int answer = Integer.MAX_VALUE;
+        N = n;
+        map = new int[n+1][n+1];
+        visit = new boolean[n+1];
+        int a, b;
+        
+        //map을 만든다.
+        for(int i=0; i<wires.length; i++){
+            a = wires[i][0];
+            b = wires[i][1];
+            
+            map[a][b] = 1;
+            map[b][a] = 1;
+        }
+        
+        
+        for(int i=0; i<wires.length; i++){
+            a = wires[i][0];
+            b = wires[i][1];
+            
+            //연결을 끊음
+            map[a][b] = 0;
+            map[a][b] = 0;
+            
+            //a와 연결되지 않은 노드들을 갯수를 찾는다.
+            answer = Math.min(answer, BFS(a));
+            
+            //다시 연결
+            map[a][b] = 1;
+            map[a][b] = 1;
+            
+            
+        }
+    
+        
+        return answer;
+    }
+    
+    public static int BFS(int current){
+        Queue<Integer> queue = new LinkedList<>();
+        boolean[] BFS_visit = new boolean[N+1];
+        queue.add(current);
+        int cnt = 1;
+        
+        while(!queue.isEmpty()){
+            int a = queue.poll();
+            BFS_visit[a] = true;
+            
+            for(int i=1; i<=N; i++){
+                if(map[a][i] == 1 && !BFS_visit[i]){
+                    queue.add(i);
+                    cnt++;
+                }
+            }
+        }
+        
+        
+        return (int)Math.abs(cnt - (N-cnt));
+    }
+    
+}
