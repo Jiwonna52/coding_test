@@ -1,0 +1,43 @@
+class Solution {
+    public int[] solution(int n) {
+        int[] answer = new int[(n*(n+1))/2];
+        int[][] map = new int[n][n];
+        
+        int x = -1;
+        int y = 0;
+        int num = 1;
+        
+        //삼각 닲팽이는 아래 -> 오른쪽 -> 대각선 방향으로 움직인다.
+        //첫 번째 반복문은 방향을 지정해주고 두 번째 반복문은 방향에 맞는 칸에 숫자를 넣어주는 것이다.
+        for(int i=0; i<n; i++){
+            for(int j=i; j<n; j++){
+                if(i%3 == 0){
+                    x++;
+                }
+                if(i%3 == 1){
+                    y++;
+                }
+                if(i%3 == 2){
+                    x--;
+                    y--;
+                }
+                map[x][y] = num++;
+            }
+        }
+        
+        //숫자를 다 넣어줬다면 순서대로 answer에 값을 넣어준다.
+        int idx = 0;
+        for(int i=0; i<n; i++){
+            for(int j=0; j<n; j++){
+                if(map[i][j] == 0){
+                    break;
+                }
+                answer[idx++] = map[i][j];
+            }
+        }
+
+        
+        return answer;
+    }
+    
+}
