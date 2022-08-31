@@ -1,0 +1,40 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+
+public class Main {
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));;
+        int N = Integer.parseInt(br.readLine());
+        String[] s1 = br.readLine().split(" ");
+        String[] s2 = br.readLine().split(" ");
+        long[] length = new long[N-1];
+        long[] node = new long[N];
+        long answer = 0;
+        long current = 0;
+
+        for(int i=0; i<s1.length; i++){
+            length[i] = Long.parseLong(s1[i]);
+        }
+
+        for(int i=0; i<s2.length; i++){
+            node[i] = Long.parseLong(s2[i]);
+        }
+
+        //지금껏 넣오던 가격보다 현재의 가격이 더 적으면 더 적은 가격으로 바꿔서 기름을 넣어주면 된다.
+        current = node[0];
+        for(int i=0; i<s2.length-1; i++){
+            if(node[i] < current){
+                current = node[i];
+            }
+
+            answer += (current*length[i]);
+        }
+
+        System.out.println(answer);
+        return;
+    }
+
+}
