@@ -1,0 +1,50 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+
+public class Main {
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        List<pair> list = new LinkedList<>();
+        String[] s = br.readLine().split(" ");
+
+        for(int i=0; i<N; i++){
+            list.add(new pair(i, Integer.parseInt(s[i])));
+        }
+
+        Collections.sort(list);
+
+        System.out.println(greedy(list));
+
+        return;
+    }
+
+    public static int greedy(List<pair> list){
+        int tmp = 0;
+        int answer = 0;
+        for(pair l : list){
+            tmp = (l.time + tmp);
+            answer += tmp;
+        }
+
+        return answer;
+    }
+}
+
+class pair implements Comparable<pair>{
+    int num;
+    int time;
+
+    public pair(int num, int time){
+        this.num = num;
+        this.time = time;
+    }
+
+    @Override
+    public int compareTo(pair a){
+        return this.time - a.time;
+    }
+}
