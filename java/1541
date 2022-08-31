@@ -1,0 +1,39 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+
+public class Main {
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));;
+        String[] s = br.readLine().split("-");
+        //첫 번째 값을 구별하기 위한 최대값
+        int sum = Integer.MAX_VALUE;
+
+        for(int i=0; i<s.length; i++){
+            int tmp = 0;
+            //'+'문자는 메타문자라서 문자 자체로 나누기 위해서는 \\+이렇게 표현을 해줘야 한다.
+            String[] add = s[i].split("\\+");
+
+            //더하는 부분을 계산해준다.
+            for(int j=0; j<add.length; j++){
+                tmp += Integer.parseInt(add[j]);
+            }
+
+            //만일 첫 번째 숫자라면 tmp를 넣어줘야 한다.
+            //수식의 첫 번째 숫자는 언제나 양수라는 점을 주의해야 한다.
+            //첫 숫자를 양수로 두지 않으면 계속 빼기를 해서 잘못된 값이 나온다.
+            if(sum == Integer.MAX_VALUE){
+                sum = tmp;
+            }else{
+                sum -= tmp;
+            }
+        }
+
+        System.out.println(sum);
+
+        return;
+    }
+
+}
