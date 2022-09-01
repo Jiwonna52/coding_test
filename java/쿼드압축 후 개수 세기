@@ -1,0 +1,41 @@
+class Solution {
+    public static int[] answer;
+    public int[] solution(int[][] arr) {
+        answer = new int[2];
+        quad(arr, 0, 0, arr.length);
+        
+        return answer;
+    }
+    
+    public static void quad(int[][] arr, int x, int y, int size){
+        //만든 사각형의 값이 모두 같은지 검사
+        //값이 1이라면 1에 ++, 0이라면 0에 ++
+        if(check(arr, x, y, size, arr[x][y])){
+            if(arr[x][y] == 1){
+                answer[1]++;
+            }else{
+                answer[0]++;
+            }
+            return;
+        }
+        
+        //4개로 나눠서 찾는다.
+        quad(arr, x, y, size/2);
+        quad(arr, x, y+size/2, size/2);
+        quad(arr, x+size/2, y, size/2);
+        quad(arr, x+size/2, y+size/2, size/2);
+        
+        
+    }
+    
+    public static boolean check(int[][] arr, int x, int y, int size, int value){
+        for(int i=x; i<x+size; i++){
+            for(int j=y; j<y+size; j++){
+                if(arr[i][j] != value){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+}
