@@ -1,0 +1,72 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+
+public class Main {
+    public static List<Integer>[] map;
+    public static boolean[] visit;
+    public static int[] order;
+    public static int count;
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));;
+        String[] s = br.readLine().split(" ");
+        int N = Integer.parseInt(s[0]);
+        int M = Integer.parseInt(s[1]);
+        int R = Integer.parseInt(s[2]);
+
+        count = 0;
+        order = new int[N+1]; //인덱스가 해당 노드, 인덱스의 값은 해당 노드가 몇 번째에 나왔나를 표시
+        map = new ArrayList[N+1];
+        for(int i=1; i<=N; i++){
+            map[i] = new ArrayList<>();
+        }
+
+        visit = new boolean[N+1];
+
+        for(int i=0; i<M; i++){
+            String[] tmp = br.readLine().split(" ");
+            int a = Integer.parseInt(tmp[0]);
+            int b = Integer.parseInt(tmp[1]);
+
+            map[a].add(b);
+            map[b].add(a);
+        }
+
+        for(int i=1; i<=N; i++){
+            Collections.sort(map[i]);
+        }
+
+        BFS(R);
+
+        for(int i=1; i<=N; i++){
+            System.out.println(order[i]);
+        }
+
+        return;
+    }
+
+    public static void BFS(int first){
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(first);
+        visit[first] = true;
+
+        while(!queue.isEmpty()){
+            int current = queue.poll();
+            count++;
+            order[current] = count;
+            System.out.println("current " + current + " count " + count);
+
+            for(int i : map[current]){
+                if(!visit[i]){
+                    queue.add(i);
+                    visit[i] = true;
+                }
+            }
+        }
+
+        return;
+    }
+
+}
