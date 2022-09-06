@@ -1,0 +1,62 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class Main {
+    public static List<Integer>[] map;
+    public static boolean[] visit;
+    public static int[] count;
+    public static int N, M, idx;
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] s = br.readLine().split(" ");
+        N = Integer.parseInt(s[0]);
+        M = Integer.parseInt(s[1]);
+        int R = Integer.parseInt(s[2]);
+        visit = new boolean[N+1];
+        count = new int[N+1];
+        idx = 1;
+
+        map = new ArrayList[N+1];
+        for(int i=1; i<=N; i++){
+            map[i] = new ArrayList<>();
+        }
+
+        for(int i=0; i<M; i++){
+            String[] tmp = br.readLine().split(" ");
+            int a = Integer.parseInt(tmp[0]);
+            int b = Integer.parseInt(tmp[1]);
+
+            map[a].add(b);
+            map[b].add(a);
+        }
+
+        for(int i=1; i<=N; i++){
+            Collections.sort(map[i]);
+        }
+
+        DFS(R);
+
+        for(int i=1; i<=N; i++){
+            System.out.println(count[i]);
+        }
+
+        return;
+    }
+
+    public static void DFS(int r){
+        visit[r] = true;
+        count[r] = idx;
+
+        for(int i : map[r]){
+            if(!visit[i]){
+                idx++;
+                DFS(i);
+            }
+        }
+        return;
+
+    }
+
+}
