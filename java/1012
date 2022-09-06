@@ -1,0 +1,96 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+class pair{
+    int row;
+    int col;
+
+    public pair(int row, int col){
+        this.row = row;
+        this.col = col;
+    }
+
+}
+public class Main {
+    //public static List<Integer>[] map;
+    public static boolean[][] visit;
+    public static int[][] map;
+    public static int[] R = {-1, 1, 0 , 0};
+    public static int[] C = {0, 0, -1, 1};
+    public static int N, M;
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine());
+        int K;
+        int a, b;
+
+        for(int i=0; i<T; i++){
+            String[] s = br.readLine().split(" ");
+            int count = 0;
+            M = Integer.parseInt(s[0]);
+            N = Integer.parseInt(s[1]);
+            K = Integer.parseInt(s[2]);
+            visit = new boolean[N][M];
+            map = new int[N][M];
+
+            for(int j=0; j<K; j++){
+                String[] s2 = br.readLine().split(" ");
+                a = Integer.parseInt(s2[0]);
+                b = Integer.parseInt(s2[1]);
+
+                map[b][a] = 1;
+
+            }
+
+            //k가 세로, h가 가로
+            for(int k=0; k<N; k++){
+                for(int h=0; h<M; h++){
+                    if(!visit[k][h] && map[k][h] == 1){
+                        BFS(k, h);
+                        count++;
+                    }
+                }
+            }
+
+            System.out.println(count);
+
+        }
+
+        return;
+    }
+
+    public static void BFS(int k, int h){
+        Queue<pair> queue = new LinkedList<>();
+        queue.add(new pair(k, h));
+        visit[k][h] = true;
+        int cRow, cCol, nRow, nCol;
+
+        while(!queue.isEmpty()){
+            pair current = queue.poll();
+            cRow = current.row;
+            cCol = current.col;
+
+            for(int i=0; i<4; i++){
+                nRow = cRow + R[i];
+                nCol = cCol + C[i];
+
+                if(nRow >= 0 && nRow < N && nCol >= 0 && nCol < M){
+                    if(!visit[nRow][nCol]){
+                        if(map[nRow][nCol] == 1){
+                            visit[nRow][nCol] = true;
+                            queue.add(new pair(nRow, nCol));
+                        }
+
+                    }
+                }
+            }
+
+        }
+
+        return;
+
+    }
+
+}
