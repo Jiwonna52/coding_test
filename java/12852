@@ -1,0 +1,53 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+
+public class Main {
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+        int x = Integer.parseInt(br.readLine());
+        int[] dp = new int[x+1];
+        int[] path = new int[x+1];
+        Arrays.fill(dp, Integer.MAX_VALUE);
+        dp[1] = 0;
+
+        //2에서부터 x를 만드는 과정
+        for(int i=2; i<=x; i++){
+            //만일 i가 3으로 나눠떨어지면 3으로 나눈 값에다가 1을 더하면 i가 나온다.
+            if(i%3 == 0){
+                //i의 순서가 현재 i보다 작다면 해당 i를 i를 3으로 나눈 순서에다가 1을 더하고 i의 값을 i/3으로 둔다
+                if(dp[i/3]+1 < dp[i]){
+                    dp[i] = dp[i/3]+1;
+                    path[i] = i/3;
+                }
+            }
+
+            if(i%2 == 0){
+                if(dp[i/2]+1 < dp[i]){
+                    dp[i] = dp[i/2]+1;
+                    path[i] = i/2;
+                }
+            }
+
+            if(dp[i-1]+1 < dp[i]){
+                dp[i] = dp[i-1] + 1;
+                path[i] = i-1;
+            }
+        }
+
+        System.out.println(dp[x]);
+
+        while(x > 0){
+            sb.append(x + " ");
+            x = path[x];
+        }
+
+        System.out.println(sb);
+
+        return;
+    }
+
+}
