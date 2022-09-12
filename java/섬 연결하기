@@ -1,0 +1,46 @@
+import java.util.Arrays;
+
+class Solution {
+    
+    public static int[] parent;
+    public int solution(int n, int[][] costs) {
+        int answer = 0;
+        parent = new int[n];
+        
+        for(int i=0; i<n; i++){
+            parent[i] = i;
+        }
+        
+        Arrays.sort(costs, (int[] c1, int[] c2) -> {
+            return c1[2] - c2[2];
+        });
+        
+        for(int[] arr : costs){
+            int start = arr[0];
+            int end = arr[1];
+            int length = arr[2];
+            
+            int startParent = find(start);
+            int endParent = find(end);
+            
+            if(startParent == endParent){
+                continue;
+            }
+            
+            answer += length;
+            parent[endParent] = startParent;
+            
+            
+        }
+        
+        return answer;
+    }
+    
+    public static int find(int node){
+        if(parent[node] == node){
+            return node;
+        }
+        
+        return parent[node] = find(parent[node]);
+    }
+}
