@@ -1,0 +1,93 @@
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.*;
+
+class node{
+    int idx;
+    int cost;
+
+    public node(int idx, int cost){
+        this.idx = idx;
+        this.cost = cost;
+    }
+}
+
+public class Main {
+
+    public static int V, E, K; //정점의 수, 간선의 수, 시작 노드
+    public static ArrayList<ArrayList<node>> graph; //간선들을 저장하는 graph
+    public static int[] d; //정점에서부터 해당 인덱스의 노드까지 최단 거리를 저장
+
+    public static void main(String args[]) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st;
+        st = new StringTokenizer(br.readLine());
+        V = Integer.parseInt(st.nextToken());
+        E = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(br.readLine());
+
+        graph = new ArrayList<ArrayList<node>>();
+        for(int i=0; i<=V; i++){
+            graph.add(new ArrayList<node>());
+        }
+
+        for(int i=0; i<E; i++){
+            st = new StringTokenizer(br.readLine());
+
+            int u = Integer.parseInt(st.nextToken());
+            int v = Integer.parseInt(st.nextToken());
+            int w = Integer.parseInt(st.nextToken());
+
+            //방향 그래프라는 문제에 유의
+            graph.get(u).add(new node(v, w));
+
+        }
+
+        d = new int[V+1];
+
+        for(int i=0; i<=V; i++){
+            d[i] = Integer.MAX_VALUE;
+        }
+
+        //우선순위 큐로 거리가 더 짧은 것이 앞에 오게
+        PriorityQueue<node> queue = new PriorityQueue<node>((o1, o2) -> Integer.compare(o1.cost, o2.cost));
+        //시작 노드를 넣는다.
+        queue.offer(new node(K, 0));
+
+        //시작 노드에서 시작 노드로 가는 거리는 0
+        d[K] = 0;
+
+        while(!queue.isEmpty()){
+            node current = queue.poll();
+
+            //만일 시작 노드부터 현재 노드까지 가는 거리가 새로운 거리보다 작다면 continue
+            if(d[current.idx] < current.cost){
+                continue;
+            }
+
+            //현재 노드와 연결되어 있는 노드들을 가지고 와 한 번씩 검사한다.
+            for(int i=0; i<graph.get(current.idx).size(); i++){
+                node next = graph.get(current.idx).get(i);
+                //현재 노드와 연결된 다음 노드의 거리가 처음 거리보다 작으면 새로운 거리를 넣어주고 queue에 넣어준다.
+                if(d[next.idx] > current.cost + next.cost){
+                    d[next.idx] = current.cost + next.cost;
+                    queue.add(new node(next.idx, d[next.idx]));
+                }
+            }
+        }
+
+        //시작 노드와 각 노드 사이의 최소 거리를 출력한다.
+        //만일 MAX_VALUE라면 이는 거리가 없는 것이므로 INF를 출력한다.
+        for(int i=1; i<=V; i++){
+            if(d[i] == Integer.MAX_VALUE){
+                System.out.println("INF");
+            }else{
+                System.out.println(d[i]);
+            }
+        }
+
+
+        return;
+    }
+
+}
