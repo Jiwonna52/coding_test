@@ -1,0 +1,80 @@
+import java.util.ArrayList;
+import java.util.PriorityQueue;
+
+class node{
+    int idx;
+    int cost;
+    
+    public node(int idx, int cost){
+        this.idx = idx;
+        this.cost = cost;
+    }
+}
+
+class Solution {
+    public static ArrayList<ArrayList<node>> graph;
+    //public static int[] A, B, S;
+    
+    public int solution(int n, int s, int a, int b, int[][] fares) {
+        int answer = Integer.MAX_VALUE;
+        
+        graph = new ArrayList<ArrayList<node>>();
+        for(int i=0; i<=n; i++){
+            graph.add(new ArrayList<node>());
+        }
+        
+        for(int i=0; i<fares.length; i++){
+            int c = fares[i][0];
+            int d = fares[i][1];
+            int f = fares[i][2];
+            
+            graph.get(c).add(new node(d, f));
+            graph.get(d).add(new node(c, f));
+        }
+        
+        int[] A = new int[n+1];
+        int[] B = new int[n+1];
+        int[] S = new int[n+1];
+        
+        for(int i=0; i<=n; i++){
+            A[i] = Integer.MAX_VALUE;   
+            B[i] = Integer.MAX_VALUE;
+            S[i] = Integer.MAX_VALUE;
+        }
+        
+        dij(s, S);
+        dij(a, A);
+        dij(b, B);
+        
+        for(int i=1; i<=n; i++){
+            answer = Math.min(answer, S[i]+A[i]+B[i]);
+        }
+        
+        
+        return answer;
+    }
+    
+    public static void dij(int start, int[] d){
+        PriorityQueue<node> queue = new PriorityQueue<node>((o1, o2) -> Integer.compare(o1.cost, o2.cost));
+        queue.add(new node(start, 0));
+        d[start] = 0;
+        
+        while(!queue.isEmpty()){
+            node current = queue.poll();
+            
+            if(d[current.idx] < current.cost){
+                continue;
+            }
+            
+            for(int i=0; i<graph.get(current.idx).size(); i++){
+                node next = graph.get(current.idx).get(i);
+                
+                if(d[next.idx] > current.cost + next.cost){
+                    d[next.idx] = current.cost + next.cost;
+                    queue.add(new node(next.idx, d[next.idx]));
+                }
+            }
+        }
+        
+    }
+}
