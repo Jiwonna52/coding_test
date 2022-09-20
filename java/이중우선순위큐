@@ -1,0 +1,47 @@
+import java.util.PriorityQueue;
+import java.util.Collections;
+
+class Solution {
+    public int[] solution(String[] operations) {
+        int[] answer = {0, 0};
+        PriorityQueue<Integer> pqL = new PriorityQueue<>();
+        PriorityQueue<Integer> pqH = new PriorityQueue<>(Collections.reverseOrder());
+        String order = "";
+        int num = 0;
+        int tmp = 0;
+        
+        for(int i=0; i<operations.length; i++){
+            String[] s = operations[i].split(" ");
+            order = s[0];
+            num = Integer.parseInt(s[1]);
+
+            if(order.equals("I")){
+                pqL.add(num);
+                pqH.add(num);
+            }
+            
+            if(order.equals("D")){
+                if(!pqL.isEmpty()){
+                    if(num == -1){
+                        num = pqL.peek();
+                        pqL.remove(num);
+                        pqH.remove(num);
+                    }else{
+                        num = pqH.peek();
+                        pqH.remove(num);
+                        pqL.remove(num);
+                    }
+
+                }
+            }
+            
+        }
+        
+        if(!pqH.isEmpty()){
+            answer[0] = pqH.poll();
+            answer[1] = pqL.poll();
+        }
+        
+        return answer;
+    }
+}
