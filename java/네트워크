@@ -1,0 +1,46 @@
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Queue;
+import java.util.LinkedList;
+
+class Solution {
+
+    public static int[][] map;
+    public static boolean[] visit;
+    public static int N;
+
+    public int solution(int n, int[][] computers) {
+        int answer = 0;
+        visit = new boolean[n];
+        map = computers;
+        N = n;
+
+        for(int i=0; i<n; i++){
+            if(!visit[i]){
+                answer++;
+                bfs(i);
+            }
+        }
+
+        return answer;
+    }
+
+    public static void bfs(int start){
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(start);
+        visit[start] = true;
+
+        while(!queue.isEmpty()){
+            int current = queue.poll();
+
+            for(int i=0; i<N; i++){
+                if(map[current][i] == 1 && !visit[i]){
+                    queue.add(i);
+                    visit[i] = true;
+                }
+            }
+
+        }
+
+    }
+}
