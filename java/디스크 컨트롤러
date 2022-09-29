@@ -1,0 +1,59 @@
+import java.util.PriorityQueue;
+import java.util.LinkedList;
+import java.util.Arrays;
+
+class pair implements Comparable<pair>{
+    int start;
+    int length;
+    
+    public pair(int start, int length){
+        this.start = start;
+        this.length = length;
+    }
+    
+    @Override
+    public int compareTo(pair o){
+        return this.length - o.length;
+    }
+    
+}
+
+class Solution {
+    public int solution(int[][] jobs) {
+        int answer = 0;
+        //현재 시간
+        //즉, 작업이 완료되는 시점
+        int end = 0;
+        int count = 0;
+        int idx = 0;
+        PriorityQueue<pair> queue = new PriorityQueue<>();
+        
+        //[20, 1]처럼 시작 시간이 큰 경우에 대비해서 먼저 시작 시간을 기준으로 값을 정렬한다.
+        Arrays.sort(jobs, (o1, o2) -> o1[0] - o2[0]);
+        
+        while(count < jobs.length){
+            //job의 시작 시간이 현재 시간보다 작거나 같으면 큐에 넣어준다.
+            //job의 시작 시간이 작업이 완료되는 시점보다 작을 때
+            while(idx < jobs.length && jobs[idx][0] <= end){
+                queue.add(new pair(jobs[idx][0], jobs[idx][1]));
+                idx++;
+            }
+            
+            //큐가 비어 있으면 end 이후에 요청이 들어온다는 의미
+            if(queue.isEmpty()){
+                end = jobs[idx][0];
+            }else{
+                //큐가 비어있지 않으면 값을 하나 빼서 answer에 계산하고 end에 length를 더해서 시작 시간을 맞춰준다.
+                pair current = queue.poll();
+                answer += (end + current.length) - current.start;
+                end += current.length;
+                count++;
+            }
+            
+        }
+        
+        answer = (int)Math.floor(answer/jobs.length);
+        
+        return answer;
+    }
+}
