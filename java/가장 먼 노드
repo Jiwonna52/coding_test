@@ -1,0 +1,82 @@
+import java.util.Queue;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ArrayList;
+
+class Solution {
+    public static boolean[] visit;
+    public static int[] count;
+    public static List<Integer>[] Amap;  
+    public static int N;
+    
+    public int solution(int n, int[][] edge) {
+        int answer = 1;
+        int max = 0;
+        N = n;
+        
+        visit = new boolean[n+1];
+        count = new int[n+1];
+        
+        Amap = new ArrayList[n+1];
+        for(int i=0; i<=n ;i++){
+            Amap[i] = new ArrayList<>();
+        }
+        
+        for(int i=0; i<edge.length; i++){
+            int a = edge[i][0];
+            int b = edge[i][1];
+            
+            Amap[a].add(b);
+            Amap[b].add(a);
+        }
+        
+        for(int i=0; i<=n; i++){
+            count[i] = Integer.MAX_VALUE;
+        }
+        
+        bfs();
+        
+        max = count[2];
+        for(int i=3; i<=n; i++){
+            
+            if(count[i] == Integer.MAX_VALUE){
+                continue;
+            }
+            
+            if(max == count[i]){
+                answer++;
+            }else if(max < count[i]){
+                max = count[i];
+                answer = 1;
+            }
+
+        }
+        
+        //for(int i=1; i<=n; i++){
+            //System.out.print(count[i] + " ");
+        //}
+        
+        return answer;
+    }
+    
+    public static void bfs(){
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(1);
+        visit[1] = true;
+        count[1] = 1;
+        
+        while(!queue.isEmpty()){
+            int current = queue.poll();
+            
+            for(int i : Amap[current]){
+                if(!visit[i]){
+                    queue.add(i);
+                    visit[i] = true;
+                    count[i] = Math.min(count[i], count[current]+1);
+                }
+            }
+            
+        }
+        
+    }
+}
