@@ -1,0 +1,97 @@
+import java.io.*;
+import java.util.*;
+
+
+class pair{
+    String g;
+    int play;
+    int idx;
+
+    pair(String g, int play, int idx){
+        this.g = g;
+        this.play = play;
+        this.idx = idx;
+    }
+
+}
+
+public class Main {
+
+
+    public static void main(String args[]) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        int num = Integer.parseInt(br.readLine());
+        String[] genres = new String[num];
+        int[] plays = new int[num];
+
+        for(int i=0; i<num; i++){
+            genres[i] = br.readLine();
+        }
+
+        for(int i=0; i<num; i++){
+            plays[i] = Integer.parseInt(br.readLine());
+        }
+
+        solution(genres, plays, num);
+
+        return;
+    }
+
+    private static void solution(String[] genres, int[] plays, int num){
+        HashMap<String, Integer> music = new HashMap<>();
+        ArrayList<pair> playlist = new ArrayList<>();
+        int[] answer;
+        int tmp = 0;
+
+        //1. 많이 재생된 장르를 찾아야 한다.
+        //1-1. 얼마나 많이 재생이 됐는지
+        for(int i=0; i<num; i++){
+            if(music.containsKey(genres[i])){
+                tmp = (music.get(genres[i])+plays[i]);
+                music.put(genres[i], tmp);
+            }else{
+                music.put(genres[i], plays[i]);
+            }
+        }
+        //1-2. 총 재생된 수를 정렬
+        List<String> keySet = new ArrayList<>(music.keySet());
+        Collections.sort(keySet, (o1, o2) -> -(music.get(o1) - music.get(o2)));
+
+
+        //2. 장르에 따라 각 음악의 재생수를 기준으로 두 곡씩 뽑기
+        //2-1. 총 재생수를 내림차순으로 정렬한 장르 list를 돌면서 해당 장르가 맞으면 list에 넣는다.
+        for(String k : keySet){
+            List<pair> tmp_music = new ArrayList<>();
+            for(int i=0; i<num; i++){
+                if(genres[i].equals(k)){
+                    tmp_music.add(new pair(k, plays[i], i));
+                }
+            }
+            //2-2. 같은 장르끼리 들어간 리스트를 음악 재생수를 기준으로 정렬한다.
+            Collections.sort(tmp_music, (oo1, oo2) -> -(oo1.play - oo2.play));
+            //2-3. 가장 재생수가 많은 음악을 리스트에 넣고 만일 음악이 두 개 이상이면 그 다음 값도(음악 수가 2개 이상이면 총 두 개 넣으라고 했으니) 넣는다.
+            playlist.add(tmp_music.get(0));
+            if(tmp_music.size() != 1){
+                playlist.add(tmp_music.get(1));
+            }
+        }
+
+        //3. 만들어진 리스트의 값을 정답 배열에 넣는다.
+        answer = new int[playlist.size()];
+        int idx = 0;
+        for(pair p : playlist){
+            answer[idx] = p.idx;
+            idx++;
+        }
+
+        for(int i : answer){
+            System.out.print(i + " ");
+        }
+
+
+        return;
+    }
+
+
+}
