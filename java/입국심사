@@ -1,0 +1,32 @@
+import java.util.*;
+
+class Solution {
+    public long solution(int n, int[] times) {
+        long answer = 0;
+        Arrays.sort(times);
+        //가능한 시간
+        long left = 1;
+        long right = (long)n * times[times.length-1];
+        
+        while(left <= right){
+            //심사받는 사람의 수
+            long sum = 0;
+            long mid = (left+right)/2;
+            
+            for(int time : times){
+                //각 심사관마다 처리할 수 있는 사람의 수
+                sum += (mid/time);
+            }
+            
+            if(sum >= n){
+                //심사가 가능한 사람이 주어진 사람보다 많다면 시간을 더 줄여야 한다.
+                right = mid-1;
+                answer = mid;
+            }else{
+                //심사가 가능한 사람이 주어진 사람보다 적다면 시간을 더 넓혀야 한다.
+                left = mid+1;
+            }
+        }
+        return answer;
+    }
+}
