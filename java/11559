@@ -1,0 +1,146 @@
+import java.io.*;
+import java.util.*;
+
+//11559
+class pair{
+    int y;
+    int x;
+    //char puyo;
+
+    pair(int y, int x){
+        this.y = y;
+        this.x = x;
+        //this.puyo = puyo;
+    }
+}
+
+public class Main {
+public static char[][] map;
+public static boolean[][] visit;
+public static boolean[][] pre_visit;
+public static int[] dy = {-1, 1, 0, 0};//상하좌우
+public static int[] dx = {0, 0, -1, 1};
+
+    public static void main(String args[]) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        map = new char[12][6];
+        visit = new boolean[12][6];
+        pre_visit = new boolean[12][6];
+        int answer = 0;
+
+        //입력
+        for(int i=0; i<12; i++){
+            String s = br.readLine();
+            for(int j=0; j<6; j++){
+                map[i][j] = s.charAt(j);
+            }
+        }
+
+        while(check()){
+            answer++;
+            next();
+        }
+
+        System.out.println(answer);
+
+        return;
+    }
+
+    private static boolean check(){
+        int erase = 0;
+        visit = new boolean[12][6];
+        pre_visit = new boolean[12][6];
+
+        for(int i=0; i<12; i++){
+            for(int j=0; j<6; j++){
+                if(map[i][j] != '.' && !visit[i][j]){
+                    if(bfs(i, j, map[i][j])){
+                        move(pre_visit, visit);
+                        erase++;
+                    }else{
+                        move(visit, pre_visit);
+                    }
+                }
+
+            }
+        }
+
+        return erase > 0 ? true : false;
+    }
+
+    private static void move(boolean[][] to, boolean[][] from){
+        for(int i=0; i<12; i++){
+            for(int j=0; j<6; j++){
+                to[i][j] = from[i][j];
+            }
+        }
+    }
+
+    private static boolean bfs(int X, int Y, char PUYO){
+        Queue<pair> queue = new LinkedList<>();
+        queue.add(new pair(X, Y));
+        visit[X][Y] = true;
+        int bfs_count = 1;
+
+        while(!queue.isEmpty()){
+            pair p = queue.poll();
+            int cY = p.y;
+            int cX = p.x;
+            //char cPuyo = p.puyo;
+            //상하좌우를 탐색
+            for(int i=0; i<4; i++){
+                int nY = cY + dy[i];
+                int nX = cX + dx[i];
+
+                if(nY >= 0 && nY < 12 && nX >= 0 && nX < 6){
+                    //char nPuyo = map[nY][nX];
+                    if(PUYO == map[nY][nX] && !visit[nY][nX]){
+                        bfs_count++;
+                        visit[nY][nX] = true;
+                        queue.add(new pair(nY, nX));
+                    }
+
+                }
+
+            }
+        }
+
+        //만일 해당 puyo와 같은 puyo의 수가 4이상이라면 이전 visit에다가 현재 visit을 넣고 참 반환
+        if(bfs_count >= 4){
+            return true;
+        }
+        return false;
+
+    }
+
+    private static void next(){
+
+        for(int i=0; i<12; i++){
+            for(int j=0; j<6; j++){
+                if(visit[i][j]){
+                    map[i][j] = '.';
+                }
+            }
+        }
+        //그리고 위에 있는 값을 밑으로 내려준다.
+        for(int j=0; j<6; j++){
+            Queue<Character> puyo_queue = new LinkedList<>();
+            for(int i=11; i>=0; i--){
+                if(map[i][j] != '.'){
+                    puyo_queue.add(map[i][j]);
+                }
+            }
+            int idx = 11;
+            while(!puyo_queue.isEmpty()){
+                map[idx][j] = puyo_queue.poll();
+                idx--;
+            }
+
+            for(int k=idx; k>=0; k--){
+                map[k][j] = '.';
+            }
+        }
+    }
+
+}
