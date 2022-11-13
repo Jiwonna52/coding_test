@@ -1,0 +1,36 @@
+class Solution {
+    public String reverseWords(String s) {
+        Stack<Character> stack = new Stack<>();
+        StringBuilder sb = new StringBuilder();
+        String answer = "";
+        for(int i=s.length()-1; i>=0; i--){
+            if(s.charAt(i) == ' '){
+                if(!stack.isEmpty()){
+                    while(!stack.isEmpty()){
+                        sb.append(stack.pop());
+                    }
+                    sb.append(' ');
+                }
+            }else{
+                stack.push(s.charAt(i));
+            }
+
+        }
+
+        if(!stack.isEmpty()){
+            while(!stack.isEmpty()){
+                sb.append(stack.pop());
+            }
+        }
+
+        answer = sb.toString();
+
+        if(answer.charAt(answer.length()-1) == ' '){
+            sb.deleteCharAt(answer.length()-1);
+        }
+
+        //System.out.println(sb.toString());
+
+        return sb.toString();
+    }
+}
