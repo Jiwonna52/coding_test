@@ -1,0 +1,67 @@
+class Solution {
+
+    //맨 마지막 level을 제외하고 깊이를 계산
+    public int countD(TreeNode node){
+        int d = 0;
+
+        while(node.left != null){
+            node = node.left;
+            d++;
+        }
+
+        return d;
+    }
+
+    public boolean exit(int idx, int d, TreeNode node){
+        int left = 0;
+        int right = (int)Math.pow(2, d)-1;
+        int pivot = 0;
+
+        for(int i=0; i<d; ++i){
+            pivot = left + (right-left)/2;
+            if(idx <= pivot){
+                node = node.left;
+                right = pivot;
+            }else{
+                node = node.right;
+                left = pivot+1;
+            }
+
+        }
+
+        if(node != null){
+            return true;
+        }
+
+        return false;
+    }
+
+    public int countNodes(TreeNode root) {
+        if(root == null){
+            return 0;
+        }
+
+        int depth = countD(root);
+        //만약에 깊이가 0이라 노드가 하나밖에 없다면 0 반환
+        if(depth == 0){
+            return 1;
+        }
+
+        //마지막 level의 노드 갯수 count
+        int left =1;
+        int right = (int)Math.pow(2,depth)-1;
+        int pivot = 0;
+
+        while(left <= right){
+            pivot = left + (right - left)/2;
+            if(exit(pivot, depth, root)){
+                left = pivot + 1;
+            }else{
+                right = pivot - 1;
+            }
+        }
+
+        return (int)Math.pow(2, depth)-1 + left;
+
+    }
+}
