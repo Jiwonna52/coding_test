@@ -1,0 +1,23 @@
+public class Solution extends GuessGame {
+    public int guessNumber(int n) {
+        int left = 1;
+        int right = n;
+        int pivot;
+
+        while(true){
+            pivot = left + (right-left)/2;
+            int tmp = guess(pivot);
+            if(tmp == 0){
+                break;
+            }
+            if(tmp == -1){
+                right = pivot-1;
+            }
+            if(tmp == 1){
+                left = pivot+1;
+            }
+        }
+
+        return pivot;
+    }
+}
