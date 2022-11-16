@@ -1,0 +1,73 @@
+import java.io.*;
+import java.util.*;
+
+
+public class Main {
+    public static int answer;
+    //각 행마다 어떤 열에  queen이 놓이는지를 확인하는 배열
+    public static int[] col;
+    public static int N;
+    public static void main(String args[]) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+        N = Integer.parseInt(br.readLine());
+        col = new int[N+1];
+
+        queen(0);
+
+        System.out.println(answer);
+
+        return;
+    }
+
+    public static void queen(int i){
+
+        //행 i가 유망한지 확인
+        if(promising(i)){
+            //만일 행 i를 전부 탐색했다면 종료
+            if(i == N){
+                answer++;
+                //print();
+                return;
+            }else{
+                //행 i+1에 j(열)을 넣고 queen으로 해당 행을 검사한다.
+                for(int j=1; j<=N; j++){
+                    col[i+1] = j;
+                    queen(i+1);
+                }
+            }
+        }
+
+    }
+
+    //i번째 행에 queen을 놓았을 때 같은 열과 대각선에 queen이 존재하는지 검사
+    public static boolean promising(int i){
+        int k;
+        boolean flag;
+
+        k=1;
+        flag = true;
+
+        while(k<i && flag){
+            //이미 같은 열이나 대각선에 퀸이 놓여있는지 확인하는 조건문
+            if(col[i] == col[k] || Math.abs(col[i]-col[k]) == i-k){
+                //그렇다면 해당 위치에는 새로운 퀸을 놓을 수가 없다.
+                flag = false;
+            }
+            //만일 열에 놓을 수 있다면 다른 열도 가능한지 검사한다.
+            k++;
+        }
+
+        return flag;
+    }
+
+    /*
+    public static void print(){
+        for(int i=1; i<=N; i++){
+            System.out.print(col[i] + " ");
+        }
+        System.out.println();
+    }
+    */
+
+}
