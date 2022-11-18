@@ -1,0 +1,29 @@
+class Solution {
+    public boolean isUgly(int n) {
+        //2, 3, 5 중 아무거나 나눠지면 ugly number이라는 뜻
+
+        if(n <= 0 ){
+            return false;
+        }
+
+        int[] num = new int[] {2, 3, 5};
+
+        for(int i : num){
+            n = Divide(n, i);
+        }
+
+        if(n != 1){
+            return false;
+        }
+
+        return true;
+
+    }
+
+    public int Divide(int n, int i){
+        while(n%i == 0){
+            n = n/i;
+        }
+        return n;
+    }
+}
