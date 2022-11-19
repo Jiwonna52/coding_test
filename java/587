@@ -1,0 +1,54 @@
+class Solution {
+
+    //
+    public int orientation(int[] p, int[] q, int[] r){
+            return (q[1]-p[1])*(r[0]-q[0]) - (q[0]-p[0])*(r[1]-q[1]);
+    }
+
+    public boolean inBetween(int[] p, int[] i, int[] q){
+        boolean a = i[0] >= p[0] && i[0] <= q[0] || i[0] <= p[0] && i[0] >= q[0];
+        boolean b = i[1] >= p[1] && i[1] <= q[1] || i[1] <= p[1] && i[1] >= q[1];
+
+        return a&&b;
+    }
+
+    public int[][] outerTrees(int[][] trees) {
+        HashSet<int[]> hull = new HashSet<>();
+
+        if(trees.length < 4){
+            for(int[] t : trees){
+                hull.add(t);
+            }
+            return hull.toArray(new int[hull.size()][]);
+        }
+
+        int left_most = 0;
+        for(int i=0; i<trees.length; i++){
+            if(trees[i][0] < trees[left_most][0]){
+                left_most = i;
+            }
+        }
+
+        int p = left_most;
+        do{
+            int q = (p+1)%trees.length;
+            for(int i=0; i<trees.length; i++){
+                if(orientation(trees[p], trees[i], trees[q]) < 0){
+                    q = i;
+                }
+            }
+            for(int i=0; i<trees.length; i++){
+                if(i != p && i != q && orientation(trees[p], trees[i], trees[q]) == 0 && inBetween(trees[p], trees[i], trees[q])){
+                    hull.add(trees[i]);
+                }
+            }
+            hull.add(trees[q]);
+            p = q;
+        }
+
+        while(p != left_most);
+        return hull.toArray(new int[hull.size()][]);
+    }
+
+
+}
