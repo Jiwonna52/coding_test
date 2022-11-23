@@ -1,0 +1,74 @@
+class Solution {
+    public static boolean[] num;
+
+    public boolean isValidSudoku(char[][] board) {
+        num = new boolean[10];
+        boolean flag = true;
+        int idx = 0;
+
+        for(int i=0; i<9; i++){
+
+            if(check(board[i]) && check(make_row(board, i))){
+                continue;
+            }else{
+                return false;
+            }           
+        }
+
+        for(int i=0; i<9; i+=3){
+            for(int j=0; j<9; j+=3){
+                if(!squre_check(i, j, board)){
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    public char[] make_row(char[][] board, int i){
+        char[] row = new char[9];
+
+        for(int j=0; j<9; j++){
+            row[j] = board[j][i];
+        }
+
+        return row;
+    }
+
+    public boolean squre_check(int i, int j, char[][] board){
+        num = new boolean[10];
+
+        for(int h=i; h<i+3; h++){
+            for(int k=j; k<j+3; k++){
+                if(board[h][k] != '.'){
+                    int tmp = board[h][k]-'0';
+                    if(num[tmp] == true){
+                    return false;
+                    }
+                    num[tmp] = true;
+                }               
+
+            }
+        }
+
+        return true;
+    }
+
+    public boolean check(char[] arr){
+        num = new boolean[10];
+
+        for(int i=0; i<9; i++){
+            if(arr[i] != '.'){
+                int tmp = arr[i]-'0';
+                if(num[tmp] == true){
+                    return false;
+                }
+                num[tmp] = true;
+            }
+        }
+
+        return true;
+    }
+
+}
