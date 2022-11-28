@@ -1,0 +1,42 @@
+class Solution {
+    public List<List<Integer>> findWinners(int[][] matches) {
+        HashSet<Integer> win = new HashSet<>();
+        HashSet<Integer> one_lost = new HashSet<>();
+        HashSet<Integer> lost = new HashSet<>();
+        List<List<Integer>> answer = Arrays.asList(new ArrayList<>(), new ArrayList<>());
+
+
+        for(int i=0; i<matches.length; i++){
+            int[] tmp = matches[i];
+            int winner = tmp[0];
+            int loser = tmp[1];
+
+            if(win.contains(loser)){
+                win.remove(loser);
+            }
+
+            if(!one_lost.contains(winner) && !lost.contains(winner)){
+                win.add(winner);
+            }
+
+            if(!one_lost.contains(loser)){
+                if(lost.contains(loser)){
+                    continue;
+                }
+                one_lost.add(loser);
+            }else{
+                one_lost.remove(loser);
+                lost.add(loser);
+            }
+
+        }
+
+        answer.get(0).addAll(win);
+        answer.get(1).addAll(one_lost);
+
+        Collections.sort(answer.get(0));
+        Collections.sort(answer.get(1));
+
+        return answer;
+    }
+}
