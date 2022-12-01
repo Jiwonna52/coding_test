@@ -1,0 +1,32 @@
+class Solution {
+    public boolean halvesAreAlike(String s) {
+        String a = s.substring(0, s.length()/2);
+        String b = s.substring(s.length()/2);
+        int countA = 0;
+        int countB = 0;
+
+        HashSet<Character> hashset = new HashSet<>();
+        hashset.add('a');
+        hashset.add('e');
+        hashset.add('i');
+        hashset.add('o');
+        hashset.add('u');
+        hashset.add('A');
+        hashset.add('E');
+        hashset.add('I');
+        hashset.add('O');
+        hashset.add('U');
+
+        for(int i=0; i<a.length(); i++){
+            if(hashset.contains(a.charAt(i))){
+                countA++;
+            }
+            if(hashset.contains(b.charAt(i))){
+                countB++;
+            }
+
+        }
+
+        return countA == countB;
+    }
+}
