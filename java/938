@@ -1,0 +1,32 @@
+class Solution {
+
+    public int answer;
+
+    public int rangeSumBST(TreeNode root, int low, int high) {
+        answer = 0;
+        DFS(root, low, high);
+        
+        return answer;
+    }
+
+    public void DFS(TreeNode node, int low, int high){
+
+        if(node.val >= low && node.val <= high){
+            answer += node.val;
+        }
+
+        if(node.left == null && node.right == null){
+            return;
+        }
+        
+        if(node.left != null){
+            DFS(node.left, low, high);
+        }
+
+        if(node.right != null){
+            DFS(node.right, low, high);
+        }
+
+        
+    }
+}
