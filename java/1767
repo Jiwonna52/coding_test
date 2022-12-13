@@ -1,0 +1,154 @@
+import java.util.Scanner;
+import java.io.FileInputStream;
+import java.util.*;
+import java.io.*;
+ 
+class pair{
+    int y;
+    int x;
+ 
+    public pair(int y,  int x) {
+        this.y = y;
+        this.x = x;
+    }
+ 
+}
+ 
+class Solution
+{
+    public static int core;
+    public static int answer;
+    public static int N;
+    public static int[][] map;
+    public static int[] Y = {-1, 1, 0, 0}; //상하좌우
+    public static int[] X = {0, 0, -1, 1};
+    public static List<pair> list;
+    public static int current_line;
+     
+    public static void main(String args[]) throws Exception
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T;
+         
+        T = Integer.parseInt(br.readLine());
+ 
+        for(int i=0; i<T; i++){
+ 
+            N = Integer.parseInt(br.readLine());
+            map = new int[N][N];
+            list = new ArrayList<>();
+            answer = Integer.MAX_VALUE;
+ 
+            for(int j=0; j<N; j++){
+                String[] s = br.readLine().split(" ");
+                for(int k=0; k<N; k++){
+                    map[j][k] = Integer.parseInt(s[k]);
+                    if(map[j][k] == 1){
+                        list.add(new pair(j, k));
+                    }
+                }
+            }
+ 
+            core = 0;
+            dfs(list, 0, 0, 0);
+            System.out.println("#" + (i+1) + " " + answer);
+        }
+        return;
+    }
+     
+  public static void dfs(List<pair> l, int length, int indx, int count){
+             
+        if(indx == l.size()){
+            if(core<count){
+                core = count;
+                answer = length;
+            }else if(count == core){
+                answer = Math.min(answer , length);
+            }       
+            return;
+        }
+ 
+        pair current = l.get(indx);
+ 
+        //core가 벽에 붙어 있으면 굳이 전선을 연결해줄 필요가 없다.
+        if(current.x == 0 || current.x == N-1 || current.y == 0 || current.y == N-1){
+            dfs(list, length, indx+1, count+1);
+        }else{
+            for(int i=0; i<4; i++){
+                int nX = current.x + X[i];
+                int nY = current.y + Y[i];
+ 
+                if (nX >= 0 && nX < N && nY >= 0 && nY < N) {
+                    if(check(nX, nY, i)){
+                        link(nX, nY, i, 2);
+                        dfs(list, current_line+length, indx+1, count+1);
+                        link(nX, nY, i, 0);
+                    }else{
+                        dfs(list, length, indx+1, count);
+                    }
+ 
+                }
+ 
+            }
+ 
+        }
+ 
+    }
+     
+    public static boolean check(int nX, int nY, int D){
+         
+        while(true){
+            if(map[nY][nX] == 1 || map[nY][nX] == 2){
+                return false;
+            }
+            //어디든 벽에 닿으면 true 반환
+            if(nX == 0 || nX == N-1 || nY == 0 || nY == N-1){
+                return true;
+            }
+ 
+            //만일 전선을 놓을 길에 core가 존재하거나 미리 전선을 놓았으면
+             
+            nX += X[D];
+            nY += Y[D];
+ 
+        }
+    }
+     
+    public static void link(int nX, int nY, int D, int val){
+        map[nY][nX] = val;
+        current_line = 1;
+ 
+        while(true){
+ 
+            if(nX == 0 || nX == N-1 || nY == 0 || nY == N-1){
+                break;
+            }
+             
+            nY += Y[D];
+            nX += X[D];
+            map[nY][nX] = val;
+ 
+            current_line += 1;
+ 
+        }
+ 
+        return;
+    }
+     
+     
+        public static void re(int nX, int nY, int D){
+        map[nY][nX] = 0;
+ 
+        while(true){
+            if(nX == 0 || nX == N-1 || nY == 0 || nY == N-1){
+                map[nY][nX] = 0;
+                return;
+            }
+            nX += X[D];
+            nY += Y[D];
+ 
+            map[nY][nX] = 0;
+        }
+    }
+     
+}
