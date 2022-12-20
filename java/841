@@ -1,0 +1,31 @@
+class Solution {
+    public boolean canVisitAllRooms(List<List<Integer>> rooms) {
+        boolean[] room = new boolean[rooms.size()];
+        Stack<Integer> stack = new Stack<>();
+        stack.add(0);
+        room[0] = true;
+
+        while(!stack.isEmpty()){
+            int current = stack.pop();
+            List<Integer> tmp = rooms.get(current);
+
+            for(int i : tmp){
+                if(room[i]){
+                    continue;
+                }else{
+                    room[i] = true;
+                    stack.add(i);
+                }
+            }
+        }
+
+        for(boolean b : room){
+            if(!b){
+                return false;
+            }
+        }
+        
+
+        return true;
+    }
+}
