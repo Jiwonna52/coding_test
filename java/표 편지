@@ -1,0 +1,92 @@
+import java.util.*;
+
+class Node{
+    int pre;
+    int cur;
+    int next;
+    
+    public Node(int pre, int cur, int next){
+        this.pre = pre;
+        this.cur = cur;
+        this.next = next;
+    }
+}
+
+class Solution {
+    public String solution(int n, int k, String[] cmd) {
+        String answer = "";
+        int[] pre = new int[n];
+        int[] next = new int[n];
+        
+        //pre[i], 노드 i의 앞에 있는 노드
+        //next[i], 노듸 i의 뒤에 있는 노드
+        //맨 앞의 앞 노드와 맨 뒤의 뒤 노드는 -1로 넣어준다.
+        for(int i=0; i<n; i++){
+            pre[i] = i-1;
+            next[i] = i+1;
+        }
+        next[n-1] = -1;
+        
+        //지운 값을 넣는 stack
+        Stack<Node> stack = new Stack<>();
+        StringBuilder sb = new StringBuilder("O".repeat(n));
+        
+        //명령을 차례대로 진행시킨다.
+        for(int i=0; i<cmd.length; i++){
+            String[] s = cmd[i].split(" ");
+            String order = s[0];
+            
+            if(order.equals("U")){
+                //위로 올라가야 할 때는 k의 값을 하니씩 앞으로 옮긴다.
+                int num = Integer.parseInt(s[1]);
+                while(num > 0){
+                    k = pre[k];
+                    num--;
+                }
+                
+            }else if(order.equals("D")){
+                //아래로 내려가야 할 때는 k의 값을 하나씩 뒤로 옮긴다.
+                int num = Integer.parseInt(s[1]);
+                while(num > 0){
+                    k = next[k];
+                    num--;
+                }
+            }else if(order.equals("C")){
+                //삭제할 값(k의 앞에 있는 값, k, k의 뒤에 있는 값)을 스택에 넣어준다.
+                stack.push(new Node(pre[k], k, next[k]));
+                //맨 앞에 있는 숫자가 아니라면 k의 앞에 있는 숫자의 next(원래 k가 있던 자리)에는 k의 next가 들어가야 한다.
+                if(pre[k] != -1){
+                    next[pre[k]] = next[k];
+                }
+                //맨 뒤에 있는 숫자가 아니라면 k의 뒤에 있는 숫자의 pre(원래 k가 있던 자리)에는 k의 pre가 들어가야 한다.
+                if(next[k] != -1){
+                    pre[next[k]] = pre[k];
+                }
+                //k가 지워졌으므로 해당 k의 위치에 'X'로 값을 넣는다.
+                sb.setCharAt(k, 'X');
+                //k가 맨 마지막이 아니라면 k는 한 칸 뒤로 내려간다.
+                if(next[k] != -1){
+                    k = next[k];
+                }else{
+                    //k가 맨 마지막이라면 k는 한 칸 올라간다.
+                    k = pre[k];
+                }
+            }else if(order.equals("Z")){
+                //가장 최근에 삭제한 값을 하나 불러온다.
+                Node node = stack.pop();
+                if(node.pre != -1){
+                    //삭제한 값이 제일 먼저 있지 않다면 해당 노드 앞에 있던 값의 뒤(원래 있었던 곳)에 값을 넣어준다.
+                    next[node.pre] = node.cur;
+                }
+                if(node.next != -1){
+                    //삭제한 값이 맨 마지막에 있지 않다면 해당 노드의 뒤에 있는 노드의 앞에 값에 다시 값을 넣어준다.
+                    pre[node.next] = node.cur;
+                }
+                //해당 값에 'O'을 넣는다.
+                sb.setCharAt(node.cur, 'O');
+            }
+        }
+        
+        return sb.toString();
+    }
+}
