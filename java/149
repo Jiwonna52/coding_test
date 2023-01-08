@@ -1,0 +1,26 @@
+class Solution {
+    public int maxPoints(int[][] points) {
+        int n = points.length;
+
+        if(n == 1){
+            return 1;
+        }
+
+        int max = 2;
+        for(int i=0; i<n; i++){
+            Map<Double, Integer> map = new HashMap<>();
+            for(int j=0; j<n; j++){
+                if(i != j){
+                    //key, value, remappingFunction
+                    //((v1, v2) -> v2 : v1이 기존이고 v2가 새 값일 때 기존의 값을 사용한다는 것)       
+                    map.merge(Math.atan2(points[j][1] - points[i][1],
+                    	points[j][0] - points[i][0]), 1, Integer::sum);
+                }
+            }
+            max = Math.max(max,  Collections.max(map.values()) + 1);
+        }
+
+        return max;
+    }
+
+}
