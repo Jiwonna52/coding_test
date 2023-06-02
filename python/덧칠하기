@@ -1,0 +1,11 @@
+def solution(n, m, section):
+    answer = 1 # section 시작 값에 먼저 칠해준다.
+    start = section[0]
+    
+    for i in range(0, len(section)):
+        if section[i] - start >= m:
+            # 만일 끝칸과 시작 칸의 차이가 롤러의 길이보다 크거나 같다면
+            answer += 1
+            start = section[i]
+    
+    return answer
