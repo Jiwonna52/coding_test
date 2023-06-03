@@ -1,0 +1,16 @@
+def solution(a, b, n):
+    answer = 0
+    
+    if n < a:
+        return answer
+    
+    while True:
+        if n < a:
+            break
+        
+        coke = (n//a)*b
+        answer += coke
+        left = n%a
+        
+        n = left+coke
+    return answer
