@@ -1,0 +1,24 @@
+def solution1(t, p):
+    answer = 0
+    intP = int(p)
+
+    for i in range(0, len(t)-len(p)+1):
+        current = t[i:i+len(p)]
+        if current[0].isdecimal():
+            current = int(current)
+            if current <= intP:
+                answer += 1
+
+    return answe
+
+def solution2(t, p):
+    answer = 0
+    intP = int(p)
+    
+    for i in range(0, len(t)-len(p)+1):
+        current = t[i:i+len(p)]
+        if int(p) >= int(current):
+            answer += 1
+
+        
+    return answer
