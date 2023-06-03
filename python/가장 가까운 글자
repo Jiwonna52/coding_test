@@ -1,0 +1,16 @@
+def solution(s):
+    answer = []
+    words = {}
+    
+    for i in range(len(s)):
+        current = s[i]
+        if current in words:
+            # 만일 해당 문자가 dict에 있다.
+            answer.append((i-words[current]))
+            words[current] = i
+        else:
+            # 처음 나온 문자다.
+            answer.append(-1)
+            words[current] = i
+    
+    return answer
