@@ -1,0 +1,80 @@
+def solution(park, routes):
+    answer = []   
+    n = len(park)
+    m = len(park[0])
+    r = 0
+    c = 0
+    
+    for i in range(n):
+        for j in range(m):
+            if park[i][j] == 'S':
+                r = i
+                c = j
+    
+    for route in routes:
+        d = route[0]
+        count = int(route[2])
+        tmpR = r
+        tmpC = c
+
+        if d == 'N':
+            for i in range(count):
+                r -= 1
+                if 0 <= r < n and 0 <= c < m:
+                    if park[r][c] == 'O' or park[r][c] == 'S':
+                        continue
+                    else:
+                        r = tmpR
+                        c = tmpC
+                        break
+                else:
+                    r = tmpR
+                    c = tmpC
+                    break
+        elif d == 'S':
+            for j in range(count):
+                r += 1
+                if 0 <= r < n and 0 <= c < m:
+                    if park[r][c] == 'O' or park[r][c] == 'S':
+                        continue
+                    else:
+                        r = tmpR
+                        c = tmpC
+                        break
+                else:
+                    r = tmpR
+                    c = tmpC
+                    break
+        elif d == 'W':
+            for j in range(count):
+                c -= 1
+                if 0 <= r < n and 0 <= c < m:
+                    if park[r][c] == 'O' or park[r][c] == 'S':
+                        continue
+                    else:
+                        r = tmpR
+                        c = tmpC
+                        break
+                else:
+                    r = tmpR
+                    c = tmpC
+                    break
+        elif d == 'E':
+            for j in range(count):
+                c += 1
+                if 0 <= r < n and 0 <= c < m:
+                    if park[r][c] == 'O' or park[r][c] == 'S':
+                        continue
+                    else:
+                        r = tmpR
+                        c = tmpC
+                        break
+                else:
+                    r = tmpR
+                    c = tmpC
+                    break
+    
+    answer.append(r)
+    answer.append(c)
+            
+    return answer
