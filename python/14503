@@ -1,0 +1,110 @@
+import sys
+from collections import deque
+
+n, m = map(int, sys.stdin.readline().rstrip().split(" "))
+#d가 0인 경우 북, 1인 경우 동, 2인 경우 남, 3인 경우 서
+r, c, d = map(int, sys.stdin.readline().rstrip().split(" "))
+
+graph = []
+# 북동남서로 돌아갈 거임
+dR = [-1, 0, 1, 0]
+dC = [0, 1, 0, -1]
+answer = 0
+
+for i in range(n):
+    graph.append(list(map(int, sys.stdin.readline().rstrip().split(" "))))
+
+
+def move(mD):
+    if mD == 0:
+        return 3
+
+    return mD-1
+
+
+# 처음 빈 칸은 전부 청소되지 않은 상태이므로 청소 상태로 만들어 준다.
+graph[r][c] = -1
+answer += 1
+
+while True:
+    # 사방에 청소 가능한 곳이 있는지 확인하는 변수
+    flag = False
+
+    # 현재 좌표를 기준으로 사방에 청소할 수 있는 칸이 존재하는지 확인한다.
+    for i in range(4):
+        nR = r + dR[i]
+        nC = c + dC[i]
+        # 만일 새로 만든 좌표가 범위 안에 있다면
+        if (0 <= nR < n) and (0 <= nC < m):
+            # 만일 해당 좌표의 값이 0이라 청소할 곳이 있다면
+            if graph[nR][nC] == 0:
+                flag = True
+                break
+
+    #  flag가 참이라 청소할 공간이 있는 경우.
+    if flag:
+        count = 0
+        while True:
+            if count == 4:
+                break
+            # 방향을 반시계 방향으로 회전하고 좌표를 만들어 준다.
+            d = move(d)
+            nR = r + dR[d]
+            nC = c + dC[d]
+            # 만일 새로 만든 좌표가 범위 안에 있다면
+            if (0 <= nR < n) and (0 <= nC < m):
+                # 만일 해당 칸을 청소할 수 있다면
+                if graph[nR][nC] == 0:
+                    r = nR
+                    c = nC
+                    # 청소 했으면 -1이라고 표시
+                    graph[r][c] = -1
+                    answer += 1
+                    # 청소 한 칸 했으니까 탈출
+                    break
+            count += 1
+    else:
+        # 사방에 청소할 곳이 없어서 뒤로 한 칸 움직여야 한다.
+        # 만일 현재 방향이 북쪽을 바라보고 있다면
+        if d == 0:
+            # 그리고 해당 칸을 후진할 수 있다면
+            if (0 <= r+1 < n) and (0 <= c < m):
+                if graph[r+1][c] != 1:
+                    r += 1
+                else:
+                    # 후진을 못 하면 탈출한다.
+                    break
+            else:
+                break
+        elif d == 1:
+            # 만일 현재 방향이 동쪽을 바라보고 있고 뒤로 후진할 수 있으면
+            if (0 <= r < n) and (0 <= c-1 < m):
+                # 후진했을 때 벽이 아니면 뒤로 움직인다.
+                if graph[r][c-1] != 1:
+                    c -= 1
+                else:
+                    break
+            else:
+                break
+        elif d == 2:
+            # 만일 현재 방향이 남쪽을 바라보고 있고 뒤쪽으로 움직일 수 있다면 움직인다.
+            if (0 <= r-1 < n) and (0 <= c < m):
+                # 뒤쪽으로 움직였을 때 벽이 아니면 움직인다.
+                if graph[r-1][c] != 1:
+                    r -= 1
+                else:
+                    break
+            else:
+                break
+        else:
+            # 만일 현재 방향이 서쪽을 바라보고 있고 뒤쪽으로 움직일 수 있다면.
+            if (0 <= r < n) and (0 <= c+1 < m):
+                # 움직일 곳이 벽이 아니라면
+                if graph[r][c+1] != 1:
+                    c += 1
+                else:
+                    break
+            else:
+                break
+
+print(answer)
