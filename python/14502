@@ -1,0 +1,65 @@
+import sys
+from collections import deque
+import copy
+
+dR = [-1, 0, 1, 0]
+dC = [0, 1, 0, -1]
+
+n, m = map(int, sys.stdin.readline().rstrip().split(" "))
+graph = []
+for i in range(n):
+    graph.append(list(map(int, sys.stdin.readline().rstrip().split(" "))))
+
+
+def virus():
+    q = deque()
+    tmpGraph = copy.deepcopy(graph)
+    safe = 0
+    
+    # 초기 바이러스 위치를 잡아 준다.
+    for i in range(n):
+        for j in range(m):
+            if tmpGraph[i][j] == 2:
+                q.append((i, j))
+    # 바이러스를 퍼트린다.
+    while q:
+        cR, cC = q.popleft()
+
+        for i in range(4):
+            nR = cR + dR[i]
+            nC = cC + dC[i]
+
+            if (0 <= nR < n) and (0 <= nC < m):
+                if tmpGraph[nR][nC] == 0:
+                    tmpGraph[nR][nC] = 2
+                    q.append((nR, nC))
+    # 바이러스가 퍼지지 않은 안전 구역의 수를 센다.
+    for i in range(n):
+        for j in range(m):
+            if tmpGraph[i][j] == 0:
+                safe += 1
+
+    return safe
+
+
+def wall(count):
+    # 벽을 총 3개 세우면 바이러스를 퍼트려서 안전 구역의 수를 센다.
+    if count == 3:
+        # global로 전역 변수인 answer의 값과 바이러스로 센 값을 비교해서 더 큰 값을 넣어준다.
+        global answer
+        answer = max(answer, virus())
+        return
+    
+    # 벽을 세운다.
+    for i in range(n):
+        for j in range(m):
+            if graph[i][j] == 0:
+                graph[i][j] = 1
+                wall(count+1)
+                # 세운 벽을 0으로 해줘서 다음 벽을 세울 수 있게 해야 한다.
+                graph[i][j] = 0
+
+
+answer = 0
+wall(0)
+print(answer)
