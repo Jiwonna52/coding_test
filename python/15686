@@ -1,0 +1,56 @@
+import sys
+import copy
+from itertools import combinations
+
+n, m = map(int, sys.stdin.readline().rstrip().split(" "))
+graph = []
+stores = []
+for i in range(n):
+    graph.append(list(map(int, sys.stdin.readline().rstrip().split(" "))))
+
+for i in range(n):
+    for j in range(n):
+        if graph[i][j] == 2:
+            stores.append((i, j))
+
+num = len(stores) - m
+results = list(combinations(stores, num))
+
+# 남은 치킨 가게와 각 집의 최소 거리
+def check(arr):
+    maxValue = int(1e9)
+    arrMin = [[maxValue for _ in range(n)] for _ in range(n)]
+    returnMin = 0
+
+    # 치킨 집을 하나 발견하면 해당 치킨 집과 모든 집들 사이의 치킨 거리를 구해서 더 작은 값들을 넣어준다.
+    for r1 in range(n):
+        for c1 in range(n):
+            if arr[r1][c1] == 2:
+                for r2 in range(n):
+                    for c2 in range(n):
+                        if arr[r2][c2] == 1:
+                            tmp = (abs(r1 - r2) + abs(c1 - c2))
+                            arrMin[r2][c2] = min(arrMin[r2][c2], tmp)
+
+    for i in range(n):
+        for j in range(n):
+            if arr[i][j] == 1:
+                returnMin += arrMin[i][j]
+
+    return returnMin
+
+
+answer = int(1e9)
+
+# 다 살려주겠다는 의미
+if num == 0:
+    answer = min(check(graph), answer)
+else:
+    for result in results:
+        tmpArr = copy.deepcopy(graph)
+        for res in result:
+            r, c = res
+            tmpArr[r][c] = 0
+        answer = min(check(tmpArr), answer)
+
+print(answer)
