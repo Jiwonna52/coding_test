@@ -1,0 +1,18 @@
+def solution(s, skip, index):
+    answer = ''
+    
+    for i in s:
+        post = ord(i)
+        count = 0
+        while True:
+            if count == index:
+                answer += chr(post)
+                break
+            post += 1
+            if post > 122:
+                post = 97
+            if chr(post) in skip:
+                continue
+            else:
+                count += 1
+    return answer
