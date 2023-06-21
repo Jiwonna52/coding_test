@@ -1,0 +1,84 @@
+import sys
+import copy
+from collections import deque
+
+n, m = map(int, sys.stdin.readline().rstrip().split(" "))
+graph = []
+for i in range(n):
+    graph.append(list(map(int, sys.stdin.readline().rstrip().split(" "))))
+
+dR = [-1, 0, 1, 0] #북동남서
+dC = [0, 1, 0, -1]
+# 감시하는 방향
+dWatch = [
+    [],
+    [[0], [1], [2], [3]],
+    [[0, 2], [1, 3]],
+    [[0, 1], [1, 2], [2, 3], [0, 3]],
+    [[0, 1, 3], [0, 1, 2], [1, 2, 3], [0, 2, 3]],
+    [[0, 1, 2, 3]]
+]
+# 감시 카메라의 종류와 위치를 넣는 배열
+cctves = []
+# 정답을 넣는 변수
+answer = int(1e9)
+
+# 리스트에 감시 카메라의 종류와 위치를 넣어준다.
+for i in range(n):
+    for j in range(m):
+        if 1 <= graph[i][j] <= 5:
+            # 감시 카메라의 종류, 열, 행
+            cctves.append((graph[i][j], i, j))
+
+
+# 주어진 그래프와 감시 카메라의 감시 위치를 가지고 감시할 수 있는 곳을 표시한다.
+def make(graph3, arr, r, c):
+    q = deque()
+
+    # 감시 할 수 있는 곳을 -1로 표시한다.
+    for a in arr:
+        q.append((r, c))
+        while q:
+            cR, cC = q.popleft()
+
+            nR = cR + dR[a]
+            nC = cC + dC[a]
+
+            if 0<= nR <n and 0<= nC <m:
+                if graph3[nR][nC] != 6:
+                    graph3[nR][nC] = -1
+                    q.append((nR, nC))
+
+    return graph3
+
+
+# 깊이 우선 탐색으로 모든 감시 카메라의 경우의 수를 구해준다.
+def dfs(count, graph2):
+    # 모든 cctv를 확인했다면 사각지대가 어디 있는지 찾는다.
+    if count == len(cctves):
+        safe = 0
+        global answer
+        # 사각지대의 갯수를 세는 반복문
+        for i in range(n):
+            for j in range(m):
+                if graph2[i][j] == 0:
+                    safe += 1
+
+        # 더 작은 걸 정답으로 한다.
+        answer = min(answer, safe)
+        return
+
+    # 현재 위치에 있는 cctv 정보를 가지고 온다.
+    num, r, c = cctves[count]
+
+    # 현재 cctv가 갈 수 있는 곳을 방문한다.
+    for cctv in dWatch[num]:
+        tmp = copy.deepcopy(graph2)
+        # 현재 cctv가 갈 수 있는 곳을 방문한 다음 해당 그래프를 이용해 다음 cctv로 넘어간다.
+        dfs(count+1, make(graph2, cctv, r, c))
+        # 새로운 cctv 경로를 넣어주기 위해 예전 값을 돌려준다.
+        graph2 = copy.deepcopy(tmp)
+
+
+dfs(0, graph)
+print(answer)
