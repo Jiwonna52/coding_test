@@ -1,0 +1,53 @@
+import math
+
+def solution(fees, records):
+    answer = []
+    money = []
+    time = {}
+    inOut = {}
+    timeIn = {}
+    finialTime = 0
+    
+    # 시간을 구해주는 함수
+    def calTime(h, m):
+        return h*60 + m
+     
+    # 주어진 시간으로 주차 요금을 구해주는 함수
+    def calMoney(t):
+        if t <= fees[0]:
+            return fees[1]      
+        return fees[1] + (math.ceil((t-fees[0])/fees[2])*fees[3])
+            
+    for record in records:
+        inTime, number, order = record.split(" ")
+        h, m = inTime.split(":")
+        h = int(h)
+        m = int(m)
+        tmpTime = calTime(h, m)
+        
+        if order == "IN": # 차가 들어왔다.
+            if not (number in time): # 처음 들어온 차면 누적 시간을 0으로 초기화
+                time[number] = 0 
+            inOut[number] = True # 들어왔음을 표시
+            timeIn[number] = tmpTime # 들어온 시간을 표시    
+        else: # 차가 나갔다.
+            inOut[number] = False # 차가 나갔음을 표시
+            time[number] += (tmpTime-timeIn[number]) # 차가 나갔기에 나간 시간과 들어온 시간을 이용해 주차 시간을 누적해서 계산
+    
+    # 차가 들어왔는데 안 나가는 경우 23:59를 출차시간으로 계산
+    finialTime = calTime(23, 59)
+    for key in inOut.keys():
+        if inOut[key] == True:
+            time[key] += (finialTime - timeIn[key])
+    
+    # 차량 번호가 작은 자동차를 기준으로 정렬해야 하기에 정렬을 위한 배열을 만들어 준다.
+    for key in time.keys():
+        money.append((key, calMoney(time[key])))
+        
+    money.sort(key=lambda x : (x[0], x[1])) # 차량 번호를 기준으로 정렬
+    
+    # 정렬된 배열 중 주차 요금만 가지고 와서 answer에 넣어준다.
+    for m in money:
+        answer.append(m[1])
+
+    return answer
