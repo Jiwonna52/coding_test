@@ -1,0 +1,25 @@
+def solution(keymap, targets):
+    answer = []
+    keyDic = {}
+    
+    # 각 키마다 최소 위치를 찾아준다.
+    for key in keymap:
+        for index, k in enumerate(key):
+            if not k in keyDic.keys():
+                keyDic[k] = (index+1)
+            else:
+                keyDic[k] = min(keyDic[k], (index+1))
+
+    for target in targets:
+        tmp = 0
+        flag = True
+        for t in target:
+            if t in keyDic.keys():
+                tmp += keyDic[t]
+            else:
+                answer.append(-1)
+                flag = False
+                break
+        if flag:
+            answer.append(tmp)
+        
