@@ -1,0 +1,58 @@
+import sys
+import heapq
+
+t = int(sys.stdin.readline().rstrip())
+maxInt = int(1e9)
+
+
+def dij(start, arr):
+    dp = [maxInt for _ in range(n)]
+    hq = []
+    heapq.heappush(hq, (0, start))
+    dp[start] = 0
+
+    while hq:
+        cost, node = heapq.heappop(hq)
+
+        if cost > dp[node]:
+            continue
+
+        for a in arr[node]:
+            aNode, aCost = a
+            if dp[aNode] > cost+aCost:
+                dp[aNode] = cost+aCost
+                heapq.heappush(hq, (dp[aNode], aNode))
+
+    return dp
+
+
+def findWarm(arr):
+    non = 0
+    for a in arr:
+        if a == int(1e9):
+            non += 1
+    return non
+
+def lastInfection(arr):
+    maxTime = 0
+    for a in arr:
+        if a != int(1e9):
+            if maxTime < a:
+                maxTime = a
+    return maxTime
+
+
+for _ in range(t):
+    n, d, c = map(int, sys.stdin.readline().rstrip().split(" "))
+
+    graph = [[] for _ in range(n)]
+    c -= 1
+    for _ in range(d):
+        # a가 b를 의존한다. -> b에서 a로 갈 수 있다.
+        a, b, s = map(int, sys.stdin.readline().rstrip().split(" "))
+        a -= 1
+        b -= 1
+        graph[b].append([a, s])
+
+    result = dij(c, graph)
+    print(n-findWarm(result), lastInfection(result))
