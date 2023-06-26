@@ -1,0 +1,49 @@
+import sys
+import heapq
+
+n, e = map(int, sys.stdin.readline().rstrip().split(" "))
+graph = [[] for _ in range(n)]
+maxInt = int(1e9)
+
+for _ in range(e):
+    a, b, c = map(int, sys.stdin.readline().rstrip().split(" "))
+    a -= 1
+    b -= 1
+    graph[a].append([b, c])
+    graph[b].append([a, c])
+
+v1, v2 = map(int, sys.stdin.readline().rstrip().split(" "))
+v1 -= 1
+v2 -= 1
+
+
+def dij(start):
+    dp = [maxInt for _ in range(n)]
+    hq = []
+    dp[start] = 0
+    heapq.heappush(hq, (dp[start], start))
+
+    while hq:
+        cost, node = heapq.heappop(hq)
+
+        if cost > dp[node]:
+            continue
+
+        # 노드하고 연결 된 거 다 찾아야 한다.
+        for current in graph[node]:
+            index, newCost = current
+            # 값이 0이 아니라는 의미는 분명 연결이 되어있다는 뜻
+            if dp[index] > cost + newCost:
+                dp[index] = cost + newCost
+                heapq.heappush(hq, (dp[index], index))
+    return dp
+
+
+original = dij(0)
+v1Dp = dij(v1)
+v2Dp = dij(v2)
+
+v1Tov2 = original[v1] + v1Dp[v2] + v2Dp[n-1]
+v2Tov1 = original[v2] + v2Dp[v1] + v1Dp[n-1]
+answer = min(v1Tov2, v2Tov1)
+print(answer if answer < maxInt else -1)
