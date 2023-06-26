@@ -1,0 +1,24 @@
+def solution(players, callings):
+    answer = []
+    # 등수->선수
+    rank ={index:player for index, player in enumerate(players)}
+    # 선수->등수
+    playersRank = {player:index for index, player in enumerate(players)}
+    
+    for calling in callings:
+        currentRank = playersRank[calling]
+        frontRank = currentRank - 1
+        frontPlayer = rank[frontRank]
+        
+        # 현재 등수를 앞에 있는 선수의 등수와 바꿔준다.
+        rank[currentRank] = frontPlayer
+        rank[frontRank] = calling
+        
+        # 등수를 선수에 맞춰서 바꿔준다.
+        playersRank[calling] = frontRank
+        playersRank[frontPlayer] = currentRank
+    
+    for i in range(len(players)):
+        answer.append(rank[i])
+        
+    return answer
