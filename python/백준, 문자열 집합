@@ -1,0 +1,33 @@
+import sys
+
+
+class trie:
+    def __init__(self):
+        self.root = {}
+
+    def insert(self, word: str) -> None:
+        cur = self.root # 일단 처음 루트로 맞춰준다.
+        for w in word:
+            if w not in cur:
+                cur[w] = {}
+            cur = cur[w]
+        cur['*'] = ''
+
+    def find(self, word: str) -> bool:
+        cur = self.root
+        for w in word:
+            if w not in cur:
+                return False
+            cur = cur[w]
+        return '*' in cur
+
+
+n, m = map(int, sys.stdin.readline().rstrip().split(" "))
+t = trie()
+for i in range(n):
+    t.insert(sys.stdin.readline().rstrip())
+answer = 0
+for i in range(m):
+    if t.find(sys.stdin.readline().rstrip()):
+        answer += 1
+print(answer)
