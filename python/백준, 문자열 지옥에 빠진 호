@@ -1,0 +1,81 @@
+import sys
+
+
+class Trie:
+    def __init__(self):
+        self.root = {}
+
+    def insert(self, word: str) -> None:
+        cur = self.root
+        for w in word:
+            if w not in cur:
+                cur[w] = {}
+            cur = cur[w]
+        cur['*'] = word
+
+    def findWord(self, word: str) -> bool:
+        cur = self.root
+        for w in word:
+            if w not in cur:
+                return False
+            cur = cur[w]
+        return '*' in cur
+
+
+N, M, K = map(int, sys.stdin.readline().rstrip().split(" "))
+graph = [['' for _ in range(M)] for _ in range(N)]
+for i in range(N):
+    input1 = sys.stdin.readline().rstrip()
+    for j in range(M):
+        graph[i][j] = input1[j]
+godWords = {}
+godWordsList = []
+t = Trie()
+for i in range(K):
+    godWord = sys.stdin.readline().rstrip()
+    godWords[godWord] = 0
+    godWordsList.append(godWord)
+    if not t.findWord(godWord):
+        t.insert(godWord)
+
+
+dR = [-1, 0, 1, 0, -1, 1, -1, 1]
+dC = [0, 1, 0, -1, -1, 1, 1, -1]
+answer = 0
+
+
+def dfs(word, r, c, cnt):
+    if cnt > 5:
+        return
+
+    if word in godWords:
+        godWords[word] += 1
+        #return
+
+    for i in range(8):
+        nR = r + dR[i]
+        nC = c + dC[i]
+
+        if nR < 0:
+            nR = N-1
+        elif nR >= N:
+            nR = 0
+
+        if nC < 0:
+            nC = M-1
+        elif nC >= M:
+            nC = 0
+
+        tmp = word
+        word += graph[nR][nC]
+        dfs(word, nR, nC, cnt+1)
+        word = tmp
+
+
+for i in range(N):
+    for j in range(M):
+        dfs(graph[i][j], i, j, 1)
+
+for w in godWordsList:
+    if w in godWords:
+        print(godWords[w])
