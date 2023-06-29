@@ -1,0 +1,29 @@
+import copy
+
+visit = [False for _ in range(101)]
+answerList = []
+
+def dfs(cards, num, count):
+    if visit[num]:
+        answerList.append(count)
+        return
+    visit[num] = True
+    num = cards[num]
+    num -= 1
+    dfs(cards, num, count+1)
+    
+
+def solution(cards):
+    answer = 0
+    
+    for i in range(len(cards)):
+        if not visit[i]:
+            dfs(cards, i, 0)
+    
+    if len(answerList) < 2:
+        return 0
+    answerList.sort()
+    answer = answerList[len(answerList)-1] * answerList[len(answerList)-2]
+
+
+    return answer
