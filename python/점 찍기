@@ -1,0 +1,13 @@
+import math
+
+def solution(k, d):
+    answer = 0
+    a = 0
+    
+    while True:
+        if a*k > d:
+            break
+        answer += (int(math.sqrt(math.pow(d, 2) - math.pow(a*k, 2)))//k)+1
+        a += 1
+        
+    return answer
