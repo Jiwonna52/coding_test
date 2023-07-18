@@ -1,0 +1,96 @@
+import java.util.*;
+
+class Pair{
+    int row;
+    int col;
+    
+    Pair(int row, int col){
+        this.row = row;
+        this.col = col;
+    }
+}
+
+class Solution {
+    public static int[] dR = {-1, 0, 1, 0}; //북동남서
+    public static int[] dC = {0, 1, 0, -1};
+    public static int[][] count;
+    public static int rowLength, colLength;
+    
+    public int solution(String[] maps) {
+        int answer = 0;
+        rowLength = maps.length;
+        colLength = maps[0].length();
+        Pair arr[] = new Pair[3];
+        
+        for(int i=0; i<rowLength; i++){
+            String tmp = maps[i];
+            for(int j=0; j<colLength; j++){
+                if(tmp.charAt(j) == 'S'){
+                    arr[0] = new Pair(i, j);
+                }
+                if(tmp.charAt(j) == 'E'){
+                    arr[1] = new Pair(i, j);
+                }
+                if(tmp.charAt(j) == 'L'){
+                    arr[2] = new Pair(i, j);
+                }
+            }
+        }
+        
+        int goToLever = bfs(arr[0], arr[2], 'L', maps);
+        
+        if(goToLever == 1001){
+            return -1;
+        }
+        
+        int goToExit = bfs(arr[2], arr[1], 'E', maps);
+        if(goToExit == 1001){
+            return -1;
+        }
+        answer = goToLever + goToExit;
+        //System.out.println(answer);
+        return answer;
+    }
+    
+        
+    public int bfs(Pair start, Pair end, char target, String[] map){
+        Queue<Pair> queue = new LinkedList<>();
+        queue.add(start);
+        count = new int[rowLength][colLength];
+        //System.out.println(end.row + " " + end.col);
+        for(int i=0; i<rowLength; i++){
+            for(int j=0; j<colLength; j++){
+                count[i][j] = 1001;
+            }
+        }
+        //System.out.println(rowLength + " " + colLength);
+        count[start.row][start.col] = 0;
+        
+        while(!queue.isEmpty()){
+            Pair current = queue.poll();
+            int cR = current.row;
+            int cC = current.col;
+            int cCount = count[cR][cC];
+            
+            if(cR == end.row && cC == end.col){
+                break;
+            }
+            
+            for(int i=0; i<4; i++){
+                int nR = cR + dR[i];
+                int nC = cC + dC[i];
+                //int nCount = count[nR][nC];
+                
+                if(nR >= 0 && nR < rowLength && nC >= 0 && nC < colLength){
+                    if(map[nR].charAt(nC) != 'X' && count[nR][nC] > cCount+1){
+                        count[nR][nC] = cCount+1;
+                        queue.add(new Pair(nR, nC));
+                    }
+                }
+            }
+        }
+        
+        return count[end.row][end.col];
+    }
+
+}
