@@ -1,0 +1,62 @@
+import java.util.*;
+
+class Solution {
+    
+    public int divisor(int[] arr){
+        int current = arr[0];
+        int max = 0;
+        
+        for(int i=2; i<=current; i++){
+            boolean flag = true;
+            for(int num : arr){
+                if(num%i != 0){
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag){
+                max = i;
+            }
+        }
+        return max;
+    }
+
+    public int solution(int[] arrayA, int[] arrayB) {
+        int answer = 0;
+        int maxA = divisor(arrayA);
+        int maxB = divisor(arrayB);
+        
+        boolean flag = true;
+        if(maxA != 0){
+            for(int b : arrayB){
+                if(b%maxA == 0){
+                    flag = false;
+                    break;
+                }
+            }
+        }
+
+        if(flag){
+            answer = maxA;
+        }
+        
+        flag = true;
+        if(maxB != 0){
+            for(int a : arrayA){
+                if(a%maxB == 0){
+                    flag = false;
+                    break;
+                }
+            }
+        }
+
+        if(flag){
+            if(answer < maxB){
+                answer = maxB;
+            }
+        }
+        
+        
+        return answer;
+    }
+}
