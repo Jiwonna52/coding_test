@@ -1,0 +1,84 @@
+import java.util.*;
+
+class Pair{
+    int row;
+    int col;
+    int count;
+    
+    Pair(int row, int col, int count){
+        this.row = row;
+        this.col = col;
+        this.count = count;
+    }
+}
+
+class Solution {
+    public static char[][] map;
+    public static boolean[][] visit;
+    public static int[] dR = {-1, 0, 1, 0};
+    public static int[] dC = {0, 1, 0, -1};
+    public static int rowLength, colLength;
+    
+    public int solution(String[] board) {
+        int answer = 0;
+        rowLength = board.length;
+        colLength = board[0].length();
+        map = new char[rowLength][colLength];
+        visit = new boolean[rowLength][colLength];
+        Pair start = null;
+        
+        for(int i=0; i<board.length; i++){
+            for(int j=0; j<board[0].length(); j++){
+                map[i][j] = board[i].charAt(j);
+                if(map[i][j] == 'R'){
+                    start = new Pair(i, j, 1);
+                } 
+            }
+        }
+
+        answer = bfs(start);
+        
+        return answer;
+    }
+    
+    public int bfs(Pair start){
+        Queue<Pair> queue = new LinkedList<>();
+        queue.add(start);
+        visit[start.row][start.col] = true;
+        
+        while(queue.size() != 0){
+            Pair current = queue.poll();
+            int cRow = current.row;
+            int cCol = current.col;
+            int cCount = current.count;
+            
+            for(int i=0; i<4; i++){
+                int nRow = cRow + dR[i];
+                int nCol = cCol + dC[i];
+                
+                while(true){
+                    
+                    if((nRow < 0 || nRow >= rowLength || nCol < 0 || nCol >= colLength) || (map[nRow][nCol] == 'D')){
+                        if(map[nRow-dR[i]][nCol-dC[i]] == 'G'){
+                            return cCount;
+                        }
+                        break;
+                    }
+                    
+                    nRow += dR[i];
+                    nCol += dC[i];
+                }
+                nRow -= dR[i];
+                nCol -= dC[i];
+                if(!visit[nRow][nCol]){
+                    visit[nRow][nCol] = true;
+                    queue.add(new Pair(nRow, nCol, cCount+1));
+                }
+                
+            }
+        }
+        
+        return -1;
+    }
+    
+}
