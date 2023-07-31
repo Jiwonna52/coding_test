@@ -1,0 +1,54 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import java.util.*;
+
+public class Main {
+    public static int[] arr;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] input1 = br.readLine().split(" ");
+        int N = Integer.parseInt(input1[0]);
+        int C = Integer.parseInt(input1[1]);
+        arr = new int[N];
+
+        for(int i=0; i<N; i++){
+            arr[i] = Integer.parseInt(br.readLine());
+        }
+
+        Arrays.sort(arr);
+        int start = 1;
+        int end = arr[N-1] - arr[0]  + 1;
+        int mid = 0;
+
+        while(end > start){
+            mid = (start+end)/2;
+
+            if(calPossible(mid) >= C){
+                start = mid+1;
+            }else{
+                end = mid;
+            }
+        }
+
+        System.out.println(end-1);
+    }
+
+    public static int calPossible(int length){
+        int pre = 0;
+        int count = 1;
+
+        for(int i=1; i<arr.length; i++){
+            if(arr[i] - arr[pre] >= length){
+                pre = i;
+                count++;
+            }
+        }
+
+        return count;
+    }
+
+
+}
