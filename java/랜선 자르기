@@ -1,0 +1,55 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import java.util.*;
+
+public class Main {
+    public static int[] arr;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] input1 = br.readLine().split(" ");
+        int K = Integer.parseInt(input1[0]);
+        long N = Long.parseLong(input1[1]);
+        long[] lens = new long[K];
+
+        for(int i=0; i<K; i++){
+            lens[i] = Long.parseLong(br.readLine());
+        }
+
+        long left = 0;
+        Arrays.sort(lens);
+        long right = lens[K-1];
+        long mid = 0;
+
+        while(left < right){
+            mid = (left+right)/2;
+            long sum = check(lens, mid);
+
+            if(sum < N){
+                //폭을 좁혀야 한다.
+                //System.out.println("목표 보다 작으므로 자르는 길이를 낮춰야 한다.");
+                right = mid;
+            }else{
+                //System.out.println("목표보다 같거나 크므로 자르는 길이를 높여야 한다.");
+                left = mid+1;
+            }
+        }
+
+        System.out.println(left-1);
+
+    }
+
+    public static long check(long[] lens, long length){
+
+        long sum = 0;
+        for(long len : lens){
+            sum += (len/length);
+        }
+
+        return sum;
+    }
+
+
+}
