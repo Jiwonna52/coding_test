@@ -1,0 +1,63 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+import java.util.*;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        int[] budgets = new int[N];
+        String[] input = br.readLine().split(" ");
+
+        for(int i=0; i<N; i++){
+            budgets[i] = Integer.parseInt(input[i]);
+        }
+
+        int allBudget = Integer.parseInt(br.readLine());
+
+        Arrays.sort(budgets);
+
+        long start = 0;
+        long mid = 0;
+        long end = budgets[N-1]+1;
+        while(start < end){
+            mid = (start+end)/2;
+
+            long tmp = check(budgets, mid);
+            System.out.println(start + " " + mid + " " + end);
+            System.out.println(tmp);
+            if(tmp > allBudget){
+                System.out.println("기준을 낮춰야 한다.");
+                //기준을 낮춰야 한다.
+                end = mid;
+            }else{
+                System.out.println("기준을 높여야 한다.");
+                //기준을 높여야 한다.
+                start = mid+1;
+            }
+
+        }
+
+        System.out.println(start-1);
+
+    }
+
+    public static long check(int[] budgets, long standard){
+
+        long sum = 0;
+        for(long budget : budgets){
+            if(budget <= standard){
+                sum += budget;
+            }else{
+                sum += standard;
+            }
+        }
+
+        return sum;
+    }
+
+
+}
