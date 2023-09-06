@@ -1,64 +1,52 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-import java.util.Arrays;
+import java.util.*;
+import java.io.*;
 
 public class Main {
-    public static String[] arr;
-    public static String[] make;
-    public static boolean[] visit;
-    public static int L;
-    public static int C;
+
+    public static int L, C;
+    public static char[] alpha;
+    public static List<Integer> list;
+
+    // v, 모음
+    // c, 자음
+    public static void dfs(int index, int count, int v, int c, char[] arr) {
+        if (count == L) {
+            if (v >= 1 && c >= 2) {
+                for (char a : arr) {
+                    System.out.print(a);
+                }
+                System.out.println();
+            }
+            return;
+        } else {
+            for (int i=index; i<C; i++) {
+                arr[count] = alpha[i];
+                if (alpha[i] == 'a' || alpha[i] == 'e' || alpha[i] == 'i' || alpha[i] == 'o' || alpha[i] == 'u') {
+                    dfs(i+1, count+1, v+1, c, arr);
+                } else {
+                    dfs(i+1, count+1, v, c+1, arr);
+                }
+
+            }
+        }
+    }
 
     public static void main(String[] args) throws IOException {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+        StringTokenizer st = new StringTokenizer(br.readLine());
         L = Integer.parseInt(st.nextToken());
         C = Integer.parseInt(st.nextToken());
-        arr = new String[C];
-        make = new String[L];
-        visit = new boolean[C];
-        StringTokenizer stt = new StringTokenizer(br.readLine(), " ");
-
-        for(int i=0; i<C; i++){
-            arr[i] = stt.nextToken();
+        String s = br.readLine().replaceAll(" ", "");
+        alpha = new char[C];
+        for (int i=0; i<C; i++) {
+            alpha[i] = s.charAt(i);
         }
+        Arrays.sort(alpha);
 
-        Arrays.sort(arr);
+        dfs(0, 0, 0, 0, new char[L]);
 
-        re( 0,0);
-
-    }
-
-    public static void re(int at, int depth){
-        if(depth == L){
-            StringBuilder sb = new StringBuilder();
-            int vo = 0;
-            int co = 0;
-            for(String tmp : make){
-                if(tmp.equals("a") || tmp.equals("e") || tmp.equals("i") || tmp.equals("o") || tmp.equals("u")){
-                    vo++;
-                }else{
-                    co++;
-                }
-                sb.append(tmp);
-            }
-
-            if(vo >= 1 && co >= 2){
-                System.out.println(sb);
-            }
-            return;
-        }
-
-        for(int i=at; i<C; i++){
-            if(!visit[i]){
-                visit[i] = true;
-                make[depth] = arr[i];
-                re(i, depth+1);
-                visit[i] = false;
-            }
-        }
     }
 
 }
+
+
