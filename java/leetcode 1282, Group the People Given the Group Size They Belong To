@@ -1,0 +1,37 @@
+class Solution {
+    public List<List<Integer>> groupThePeople(int[] groupSizes) {
+        List<List<Integer>> answer = new ArrayList<>();
+        List<List<Integer>> group = new ArrayList<>();
+
+        for (int i=0; i<=500; i++) {
+            group.add(new ArrayList<>());
+        }
+
+        for (int i= 0; i<groupSizes.length; i++) {
+            group.get(groupSizes[i]).add(i);
+        }
+
+        for (int i=0; i<=500; i++) {
+            if (group.get(i).size() != 0) {
+                //System.out.println(i + " 값이 존재한다.");
+                int index = 0;
+                List<Integer> tmp = new ArrayList<>();
+                for (int j=0; j<group.get(i).size(); j++) {
+                    if (index == i) {
+                        //System.out.println("새로운 리스트가 필요하다.");
+                        index = 0;
+                        answer.add(tmp);
+                        tmp = new ArrayList<>();
+                    }
+                    
+                    tmp.add(group.get(i).get(j));
+                    index++;
+                }
+                answer.add(tmp);
+            }
+        }
+
+        return answer;
+        
+    }
+}
