@@ -1,0 +1,33 @@
+import java.util.*;
+import java.io.*;
+
+class Solution {
+    public int findDuplicate(int[] nums) {
+        int len = nums.length;
+        int low = 1;
+        int high = len - 1;
+
+        while (low < high) {
+            int mid = (high + low)/2;
+            int cnt = 0;
+            for (int i=0; i<len; i++) {
+                if (nums[i] <= mid) {
+                    // 더 작거나 같은 걸 찾는다.
+                    cnt++;
+                } 
+            }
+
+            if (cnt <= mid) {
+                // mid가 cnt보다 크거나 같으면 범위를 높여줌
+                System.out.println("범위를 넓힌다.");
+                low = mid + 1;
+                System.out.println(low);
+            } else {
+                System.out.println("범위를 좁힌다.");
+                high = mid;
+                System.out.println(high);
+            }
+        }
+        return low;
+    }
+}
