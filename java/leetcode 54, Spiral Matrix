@@ -1,0 +1,76 @@
+class Solution {
+
+    public static int n;
+    public static int m;
+    public static int[] dR = {0, 1, 0, -1};
+    public static int[] dC = {1, 0, -1, 0};
+    public static boolean[][] visit;
+
+    public List<Integer> spiralOrder(int[][] matrix) {
+        m = matrix.length;
+        n = matrix[0].length;
+        int r = 0;
+        int c = 0;
+        int index = 0;
+        visit = new boolean[m][n];
+        List<Integer> answer = new ArrayList<>();
+
+        while(!findFinish(r, c)) {
+            visit[r][c] = true;
+            //System.out.print(matrix[r][c]);
+            answer.add(matrix[r][c]);
+            int nR = r + dR[index];
+            int nC = c + dC[index];
+
+            if (!findInMap(nR, nC) || visit[nR][nC]) {
+                index = (index+1)%4;
+                nR = r + dR[index];
+                nC = c + dC[index];
+            }
+
+            r = nR;
+            c = nC;
+        }
+
+        answer.add(matrix[r][c]);
+
+        return answer;
+    }
+
+    public boolean findFinish(int r, int c) {
+        boolean flag = false;
+
+        if (findInMap(r-1, c)) {
+            if (!visit[r-1][c]) {
+                return false;
+            }
+        }
+        
+        if (findInMap(r+1, c)) {
+            if (!visit[r+1][c]) {
+                return false;
+            }
+        }
+
+        if (findInMap(r, c+1)) {
+            if (!visit[r][c+1]) {
+                return false;
+            }
+        }
+
+        if (findInMap(r, c-1)) {
+            if (!visit[r][c-1]) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean findInMap(int r, int c) {
+        if (r >= 0 && r < m && c >= 0 && c < n) {
+            return true;
+        }
+        return false;
+    }
+}
