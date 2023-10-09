@@ -1,0 +1,88 @@
+import java.util.*;
+import java.io.*;
+
+class Pair {
+    int r;
+    int c;
+
+    Pair (int r, int c) {
+        this.r = r;
+        this.c = c;
+    }
+}
+
+public class Main {
+
+    public static int rLength, cLength;
+    public static char[][] map;
+    public static boolean[][] visit;
+
+
+    public static int[] dR = {-1, 0, 1, 0};
+    public static int[] dC = {0, 1, 0, -1};
+
+    public static int bfs(int startR, int startC) {
+        Queue<Pair> queue = new LinkedList<>();
+        queue.add(new Pair(startR, startC));
+        visit[startR][startC] = true;
+        int[][] count = new int[rLength][cLength];
+        int max = 0;
+        count[startR][startC] = 1;
+
+        while(!queue.isEmpty()) {
+            Pair current = queue.poll();
+            int cR = current.r;
+            int cC = current.c;
+
+            for (int i=0; i<4; i++) {
+                int nR = cR + dR[i];
+                int nC = cC + dC[i];
+
+                if (nR >= 0 && nR < rLength && nC >= 0 && nC < cLength) {
+                    if (count[nR][nC] == 0 && map[nR][nC] == 'L') {
+                        count[nR][nC] = count[cR][cC] + 1;
+                        queue.add(new Pair(nR, nC));
+                        max = Math.max(max, count[nR][nC]);
+                    }
+                }
+            }
+
+        }
+
+
+        return max;
+    }
+
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        rLength = Integer.parseInt(st.nextToken());
+        cLength = Integer.parseInt(st.nextToken());
+
+        map = new char[rLength][cLength];
+        visit = new boolean[rLength][cLength];
+
+        int answer = 0;
+
+        for (int i=0; i<rLength; i++) {
+            char[] c = br.readLine().toCharArray();
+            for (int j=0; j<cLength; j++) {
+                map[i][j] = c[j];
+            }
+        }
+
+
+        for (int i=0; i<rLength; i++) {
+            for (int j=0; j<cLength; j++) {
+                if (map[i][j] == 'L') {
+                    answer = Math.max(answer, bfs(i, j)-1);
+                }
+            }
+        }
+
+        System.out.println(answer);
+
+    }
+
+}
