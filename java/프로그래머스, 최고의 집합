@@ -1,0 +1,24 @@
+import java.util.*;
+
+class Solution {
+    public int[] solution(int n, int s) {
+        int[] answer = new int[n];
+        
+        if (n > s) {
+            answer = new int[1];
+            answer[0] = -1;
+            return answer;
+        }
+        
+        int index = 0;
+        while(n > 0) {
+            answer[index] = s/n;
+            s -= s/n;
+            n--;
+            index++;
+        }
+        
+        
+        return answer;
+    }
+}
