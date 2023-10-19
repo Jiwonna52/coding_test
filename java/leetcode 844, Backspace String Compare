@@ -1,0 +1,32 @@
+import java.util.*;
+
+class Solution {
+
+    public String deleteBackspace(String s) {
+        Stack<Character> stack = new Stack<>();
+
+        for (int i=0; i<s.length(); i++) {
+            if (s.charAt(i) == '#' && !stack.isEmpty()) {
+                stack.pop();
+                continue;
+            } else if (s.charAt(i) == '#' && stack.isEmpty()) {
+                continue;
+            }
+            stack.push(s.charAt(i));
+        }
+
+        StringBuilder sb = new StringBuilder();
+        while(!stack.isEmpty()) {
+            sb.append(stack.pop());
+        }
+
+        return sb.toString();
+    }
+
+    public boolean backspaceCompare(String s, String t) {
+        //System.out.println(deleteBackspace(s));
+        //System.out.println(deleteBackspace(t));
+
+        return deleteBackspace(s).equals(deleteBackspace(t));
+    }
+}
